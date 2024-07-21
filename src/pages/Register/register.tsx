@@ -14,9 +14,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { useToast } from "@/components/ui/use-toast";
 import { formatErrors } from "@/utils/format-erros";
+import axiosInstance from "@/lib/axios";
+import { LockIcon, MailIcon, PersonStandingIcon } from "lucide-react";
 
 const formSchema = z.object({
   fullName: z
@@ -41,14 +42,11 @@ const Register = () => {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      const response = await axios.post(
-        "http://localhost:8080/api/auth/register",
-        {
-          fullName: values.fullName,
-          email: values.email,
-          password: +values.password,
-        }
-      );
+      const response = await axiosInstance.post("/auth/register", {
+        fullName: values.fullName,
+        email: values.email,
+        password: +values.password,
+      });
       toast({
         title: "Başarılı",
         description: response.data.message,
@@ -56,7 +54,6 @@ const Register = () => {
       });
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      console.log(error.response.data.message);
       toast({
         title: "Hata",
         description: formatErrors(error.response.data),
@@ -84,7 +81,7 @@ const Register = () => {
                   <FormItem>
                     <FormLabel htmlFor="fullName">Full Name</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input icon={PersonStandingIcon} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -98,7 +95,7 @@ const Register = () => {
                   <FormItem>
                     <FormLabel htmlFor="email">Email</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input type="email" icon={MailIcon} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -111,7 +108,7 @@ const Register = () => {
                   <FormItem>
                     <FormLabel htmlFor="password">Password</FormLabel>
                     <FormControl>
-                      <Input type="password" {...field} />
+                      <Input type="password" icon={LockIcon} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

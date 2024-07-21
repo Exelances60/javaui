@@ -15,13 +15,19 @@ import {
 } from "@/components/ui/form";
 import { useNavigate } from "react-router-dom";
 import { LockIcon, MailIcon } from "lucide-react";
+import { useToast } from "@/components/ui/use-toast";
+import axiosInstance from "@/lib/axios";
+import { formatErrors } from "@/utils/format-erros";
+import { useAuth } from "@/context/auth-contex";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Geçerli bir email adresi giriniz." }),
   password: z.string().min(6, { message: "Şifre en az 6 karakter olmalıdır." }),
 });
 const Login = () => {
+  const { login } = useAuth();
   const navigate = useNavigate();
+  const { toast } = useToast();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -29,7 +35,19 @@ const Login = () => {
       password: "",
     },
   });
-  async function onSubmit(values: z.infer<typeof formSchema>) {}
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      const response = await axiosInstance.post("/auth/login", values);
+      login(response.data.data);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      toast({
+        title: "Hata",
+        description: formatErrors(error.response.data),
+        variant: "destructive",
+      });
+    }
+  }
   return (
     <div className="w-full h-screen">
       <div className="w-full flex justify-end p-2">
@@ -50,7 +68,7 @@ const Login = () => {
                   <FormItem>
                     <FormLabel htmlFor="email">Email</FormLabel>
                     <FormControl>
-                      <Input icon={<MailIcon size={18} />} {...field} />
+                      <Input icon={MailIcon} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -63,11 +81,7 @@ const Login = () => {
                   <FormItem>
                     <FormLabel htmlFor="password">Password</FormLabel>
                     <FormControl>
-                      <Input
-                        type="password"
-                        icon={<LockIcon size={18} />}
-                        {...field}
-                      />
+                      <Input type="password" icon={LockIcon} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

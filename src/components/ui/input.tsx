@@ -4,25 +4,25 @@ import { cn } from "@/lib/utils";
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
-  icon?: React.ReactNode;
+  icon?: React.ElementType;
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, icon, type, ...props }, ref) => {
-    if (icon) {
+  ({ className, icon: Icon, type, ...props }, ref) => {
+    if (Icon) {
       return (
-        <div
-          className={cn(
-            "flex h-9 items-center justify-center shadow-sm rounded-md border border-input pl-3 text-sm",
-            className
+        <div className="relative">
+          {Icon && (
+            <Icon className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           )}
-        >
-          {icon && icon}
           <input
-            {...props}
             type={type}
+            className={cn(
+              "flex h-9 pl-8 w-full rounded-md border border-input bg-transparent pb-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
+              className
+            )}
             ref={ref}
-            className="w-full p-1 pl-2 pb-1 placeholder:text-muted-foreground bg-background  focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 active:outline-none "
+            {...props}
           />
         </div>
       );
