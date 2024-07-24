@@ -43,7 +43,7 @@ const BentoCard = ({
   <div
     key={name}
     className={cn(
-      "group relative col-span-3 flex flex-col justify-between overflow-hidden rounded-xl shadow",
+      "group relative col-span-3 gap-5 flex flex-col justify-between overflow-hidden rounded-xl shadow",
       // light styles
       "bg-white text-black [box-shadow:0_0_0_1px_rgba(0,0,0,.03),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)]",
       // dark styles
@@ -62,7 +62,7 @@ const BentoCard = ({
         style={{ zIndex: 1 }}
       />
     </div>
-    <div className="relative z-10 flex flex-col gap-1 p-6 transition-all duration-300 group-hover:-translate-y-10">
+    <div className="relative z-10 flex flex-col gap-1 p-6 transition-all duration-300 group-hover:-translate-y-5">
       {Icon && (
         <Icon className="h-12 w-12 transition-all duration-300 ease-in-out group-hover:scale-75" />
       )}
@@ -71,7 +71,7 @@ const BentoCard = ({
     </div>
     <div
       className={cn(
-        "pointer-events-none absolute bottom-0 flex w-full translate-y-10 transform-gpu flex-row items-center p-4 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100",
+        "pointer-events-none absolute -bottom-2 flex w-full translate-y-5 transform-gpu flex-row mt-5 items-center p-4 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100",
         "z-10"
       )}
     >
