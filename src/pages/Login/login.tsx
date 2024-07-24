@@ -19,6 +19,7 @@ import { useToast } from "@/components/ui/use-toast";
 import axiosInstance from "@/lib/axios";
 import { formatErrors } from "@/utils/format-erros";
 import { useAuth } from "@/context/auth-contex";
+import SparklesText from "@/components/magicui/sparkles-text";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Geçerli bir email adresi giriniz." }),
@@ -55,7 +56,9 @@ const Login = () => {
       </div>
       <div className="flex items-center justify-center">
         <div className="w-96 ">
-          <h1 className="text-3xl font-bold text-center">Login</h1>
+          <div className="flex justify-center">
+            <SparklesText text="Login" />
+          </div>
           <Form {...form}>
             <form
               className="mt-4 space-y-4"
