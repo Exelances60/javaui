@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { ModeToggle } from "@/components/mode-toggle";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -100,7 +100,11 @@ const Login = () => {
                 </p>
                 <p className="text-sm text-gray-500">Şifremi unuttum?</p>
               </div>
-              <Button type="submit" className="w-full">
+              <Button
+                type="submit"
+                className="w-full"
+                loading={form.formState.isSubmitting}
+              >
                 Login
               </Button>
             </form>

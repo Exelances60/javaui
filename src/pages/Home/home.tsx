@@ -1,10 +1,10 @@
 import React from "react";
+import HomeSection from "@/components/custom/home-section";
 
 const Home = () => {
   return (
-    <div>
-      <h1>Header</h1>
-      <p>Welcome to the home page</p>
+    <div className="py-2">
+      <HomeSection title="Antreman Programları" />
     </div>
   );
 };
