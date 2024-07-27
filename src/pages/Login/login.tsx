@@ -22,7 +22,6 @@ import SparklesText from "@/components/magicui/sparkles-text";
 import { cn } from "@/lib/utils";
 import DotPattern from "@/components/magicui/dot-pattern";
 import BlurFade from "@/components/magicui/blur-fade";
-import { ThemeColorToggle } from "@/components/toggle-color";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Geçerli bir email adresi giriniz." }),
