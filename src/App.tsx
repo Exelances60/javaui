@@ -6,10 +6,12 @@ import { Toaster } from "./components/ui/toaster";
 import { LoadingSpinner } from "./components/loading";
 import Layout from "./components/layout";
 import { AuthProvider } from "./context/auth-contex";
+import NotFoundPage from "./pages/404";
 
 const LoginLazy = React.lazy(() => import("./pages/Login/login"));
 const RegisterLazy = React.lazy(() => import("./pages/Register/register"));
 const HomeLazy = React.lazy(() => import("./pages/Home/home"));
+const ProfileLazy = React.lazy(() => import("./pages/Profile/profile"));
 
 function App() {
   return (
@@ -28,9 +30,9 @@ function App() {
               <Route path="/register" element={<RegisterLazy />} />
               <Route element={<Layout />}>
                 <Route path="/home" element={<HomeLazy />} />
-                <Route path="/profile" element={<div>Profile</div>} />
+                <Route path="/profile" element={<ProfileLazy />} />
               </Route>
-              <Route path="*" element={<div>404</div>} />
+              <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </Suspense>
         </AuthProvider>

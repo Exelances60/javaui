@@ -1,3 +1,4 @@
+import setGlobalColorTheme, { ThemeName } from "@/lib/theme-colors";
 import { createContext, useContext, useEffect, useState } from "react";
 
 type Theme = "dark" | "light" | "system";
@@ -9,13 +10,17 @@ type ThemeProviderProps = {
 };
 
 type ThemeProviderState = {
+  color: ThemeName;
   theme: Theme;
   setTheme: (theme: Theme) => void;
+  setColor: (color: ThemeName) => void;
 };
 
 const initialState: ThemeProviderState = {
+  color: "Zinc",
   theme: "system",
   setTheme: () => null,
+  setColor: () => null,
 };
 
 const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
@@ -26,6 +31,9 @@ export function ThemeProvider({
   storageKey = "vite-ui-theme",
   ...props
 }: ThemeProviderProps) {
+  const [color, setColor] = useState<ThemeName>(
+    () => (localStorage.getItem("vite-ui-color") as ThemeName) || "Zinc"
+  );
   const [theme, setTheme] = useState<Theme>(
     () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
   );
@@ -40,19 +48,24 @@ export function ThemeProvider({
         .matches
         ? "dark"
         : "light";
-
       root.classList.add(systemTheme);
+      setGlobalColorTheme(color, systemTheme);
       return;
     }
-
+    setGlobalColorTheme(color, theme);
     root.classList.add(theme);
-  }, [theme]);
+  }, [theme, color]);
 
   const value = {
     theme,
     setTheme: (theme: Theme) => {
       localStorage.setItem(storageKey, theme);
       setTheme(theme);
+    },
+    color,
+    setColor: (color: ThemeName) => {
+      localStorage.setItem("vite-ui-color", color);
+      setColor(color);
     },
   };
 

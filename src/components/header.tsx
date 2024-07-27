@@ -2,60 +2,72 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, Search, CircleUser, Dumbbell } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { useAuth } from "@/context/auth-contex";
+import { Menu, Search, Dumbbell } from "lucide-react";
 import { ModeToggle } from "./mode-toggle";
+import AvatarDropdown from "./avatar-dropdown";
+import { Link, useLocation } from "react-router-dom";
+import { cn } from "@/lib/utils";
 
 const Header = () => {
-  const { logout } = useAuth();
+  const { pathname } = useLocation();
   return (
     <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
       <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6 w-full">
-        <a
-          href="#"
-          className="flex items-center gap-2 text-lg font-semibold md:text-base"
+        <Link
+          to="/home"
+          className={cn(
+            "text-muted-foreground transition-colors hover:text-foreground",
+            pathname === "/home" && "text-foreground"
+          )}
         >
           <Dumbbell className="h-6 w-6" />
           <span className="sr-only">Fitness Blog</span>
-        </a>
-        <a
-          href="#"
-          className="text-foreground transition-colors hover:text-foreground"
+        </Link>
+        <Link
+          to="/home"
+          className={cn(
+            "text-muted-foreground transition-colors hover:text-foreground",
+            pathname === "/home" && "text-foreground"
+          )}
         >
           Ana Sayfa
-        </a>
-        <a
-          href="#"
-          className="text-muted-foreground  transition-colors hover:text-foreground"
+        </Link>
+        <Link
+          to={"/fit-yemek-tarifleri"}
+          className={cn(
+            "text-muted-foreground transition-colors hover:text-foreground",
+            pathname === "/fit-yemek-tarifleri" && "text-foreground"
+          )}
         >
           Fit Yemek Tarifleri
-        </a>
-        <a
-          href="#"
-          className="text-muted-foreground  transition-colors hover:text-foreground"
+        </Link>
+        <Link
+          to={"/egitim-videolari"}
+          className={cn(
+            "text-muted-foreground transition-colors hover:text-foreground",
+            pathname === "/egitim-videolari" && "text-foreground"
+          )}
         >
           Eğitim Videoları
-        </a>
-        <a
-          href="#"
-          className="text-muted-foreground  transition-colors hover:text-foreground"
+        </Link>
+        <Link
+          to={"/egitmenler"}
+          className={cn(
+            "text-muted-foreground transition-colors hover:text-foreground",
+            pathname === "/egitmenler" && "text-foreground"
+          )}
         >
           Eğitmenler
-        </a>
-        <a
-          href="#"
-          className="text-muted-foreground  transition-colors hover:text-foreground"
+        </Link>
+        <Link
+          to={"/antreman-programlari"}
+          className={cn(
+            "text-muted-foreground transition-colors hover:text-foreground",
+            pathname === "/antreman-programlari" && "text-foreground"
+          )}
         >
           Antreman Programları
-        </a>
+        </Link>
       </nav>
       <div className="flex items-center gap-4 md:hidden">
         <Sheet>
@@ -71,43 +83,61 @@ const Header = () => {
           </SheetTrigger>
           <SheetContent side="left">
             <nav className="grid gap-6 text-lg font-medium">
-              <a
-                href="#"
-                className="flex items-center gap-2 text-lg font-semibold md:text-base"
+              <Link
+                to="/home"
+                className={cn(
+                  "text-muted-foreground transition-colors hover:text-foreground",
+                  pathname === "/home" && "text-foreground"
+                )}
               >
                 <Dumbbell className="h-6 w-6" />
                 <span className="sr-only">Fitness Blog</span>
-              </a>
-              <a
-                href="#"
-                className="text-foreground transition-colors hover:text-foreground"
+              </Link>
+              <Link
+                to="/home"
+                className={cn(
+                  "text-muted-foreground transition-colors hover:text-foreground",
+                  pathname === "/home" && "text-foreground"
+                )}
               >
                 Ana Sayfa
-              </a>
-              <a
-                href="#"
-                className="text-muted-foreground transition-colors hover:text-foreground"
+              </Link>
+              <Link
+                to={"/fit-yemek-tarifleri"}
+                className={cn(
+                  "text-muted-foreground transition-colors hover:text-foreground",
+                  pathname === "/fit-yemek-tarifleri" && "text-foreground"
+                )}
               >
                 Fit Yemek Tarifleri
-              </a>
-              <a
-                href="#"
-                className="text-muted-foreground transition-colors hover:text-foreground"
+              </Link>
+              <Link
+                to={"/egitim-videolari"}
+                className={cn(
+                  "text-muted-foreground transition-colors hover:text-foreground",
+                  pathname === "/egitim-videolari" && "text-foreground"
+                )}
               >
                 Eğitim Videoları
-              </a>
-              <a
-                href="#"
-                className="text-muted-foreground transition-colors hover:text-foreground"
+              </Link>
+              <Link
+                to={"/egitmenler"}
+                className={cn(
+                  "text-muted-foreground transition-colors hover:text-foreground",
+                  pathname === "/egitmenler" && "text-foreground"
+                )}
               >
                 Eğitmenler
-              </a>
-              <a
-                href="#"
-                className="text-muted-foreground transition-colors hover:text-foreground"
+              </Link>
+              <Link
+                to={"/antreman-programlari"}
+                className={cn(
+                  "text-muted-foreground transition-colors hover:text-foreground",
+                  pathname === "/antreman-programlari" && "text-foreground"
+                )}
               >
                 Antreman Programları
-              </a>
+              </Link>
             </nav>
           </SheetContent>
         </Sheet>
@@ -118,27 +148,7 @@ const Header = () => {
             <Input icon={Search} placeholder="Search..." />
           </div>
         </form>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="secondary" size="icon" className="rounded-full">
-              <CircleUser className="h-5 w-5" />
-              <span className="sr-only">Toggle user menu</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Settings</DropdownMenuItem>
-            <DropdownMenuItem>Support</DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              className="cursor-pointer"
-              onClick={() => logout()}
-            >
-              Logout
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <AvatarDropdown />
         <ModeToggle />
       </div>
     </header>
