@@ -21,6 +21,7 @@ const initialState: ThemeProviderState = {
   theme: "system",
   setTheme: () => null,
   setColor: () => null,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
 };
 
 const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
