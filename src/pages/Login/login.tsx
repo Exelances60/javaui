@@ -57,7 +57,7 @@ const Login = () => {
       <div className="absolute flex gap-2 top-4 right-4 z-10">
         <ModeToggle />
       </div>
-      <div className="relative flex h-screen w-full flex-col items-center justify-center overflow-hidden rounded-lg  bg-background md:shadow-xl">
+      <div className="relative flex h-screen w-full flex-col  items-center justify-center overflow-hidden rounded-lg  bg-background md:shadow-xl">
         <BlurFade delay={0.1}>
           <div className="w-96 ">
             <div className="flex justify-center">
@@ -65,7 +65,7 @@ const Login = () => {
             </div>
             <Form {...form}>
               <form
-                className="mt-4 space-y-4"
+                className="mt-4 space-y-4 p-5 md:p-0"
                 onSubmit={form.handleSubmit(onSubmit)}
               >
                 <FormField

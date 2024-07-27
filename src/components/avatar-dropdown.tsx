@@ -11,9 +11,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/context/auth-contex";
 import { Link } from "react-router-dom";
+import useTextHooks from "@/hooks/useTextHooks";
 
 const AvatarDropdown = () => {
-  const { logout } = useAuth();
+  const { toTitleCase } = useTextHooks();
+  const { logout, user } = useAuth();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -24,7 +26,7 @@ const AvatarDropdown = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuLabel>
-          <span className="font-semibold">John Doe</span>
+          <span className="font-semibold">{toTitleCase(user?.name || "")}</span>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="cursor-pointer">
