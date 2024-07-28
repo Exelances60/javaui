@@ -2,7 +2,7 @@ import { useAuth } from "@/context/auth-contex";
 import axiosInstance from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
 
-interface ISocialMedia {
+export interface ISocialMedia {
   id: number;
   platform: ISocialMedaiPlartform;
   accountLink: string;

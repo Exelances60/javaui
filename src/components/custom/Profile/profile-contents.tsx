@@ -2,7 +2,7 @@ import ThemeSettigsTab from "@/components/custom/Profile/theme-settigs-tab";
 import ProfileSettigsTab from "@/components/custom/Profile/profile-settigs-tab";
 import PostsSettigsTab from "@/components/custom/Profile/post-settigs.tab";
 import SocialSettigsTab from "@/components/custom/Profile/social-settigs-tab";
-import { useGetUserInfo } from "@/hooks/userUserInfo";
+import { useGetUserInfo } from "@/hooks/useUserInfo";
 import ErrorAlert from "@/components/error-alert";
 import { SkeletonCard } from "@/components/skeleton-card";
 
@@ -28,7 +28,9 @@ const ProfileContets = ({ tab }: { tab: string }) => {
       {tab === "profile" && <ProfileSettigsTab />}
       {tab === "theme" && <ThemeSettigsTab />}
       {tab === "posts" && <PostsSettigsTab />}
-      {tab === "social" && <SocialSettigsTab />}
+      {tab === "social" && (
+        <SocialSettigsTab socialMedia={userInfo?.socialMedia} />
+      )}
     </>
   );
 };
