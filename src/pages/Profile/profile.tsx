@@ -1,14 +1,11 @@
-import React from "react";
+import { useState } from "react";
 import SettigsProfileCard from "@/components/custom/Profile/settigs-profile-card";
 import { Brush, Earth, StickyNote, UserIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import ThemeSettigsTab from "@/components/custom/Profile/theme-settigs-tab";
-import ProfileSettigsTab from "@/components/custom/Profile/profile-settigs-tab";
-import PostsSettigsTab from "@/components/custom/Profile/post-settigs.tab";
-import SocialSettigsTab from "@/components/custom/Profile/social-settigs-tab";
+import ProfileContets from "@/components/custom/Profile/profile-contents";
 
 const Profile = () => {
-  const [tab, setTab] = React.useState("profile");
+  const [tab, setTab] = useState("profile");
   return (
     <div className="container h-full p-5 flex flex-col overflow-y-auto">
       <div className="w-full mt-2 flex flex-col gap-3">
@@ -58,10 +55,7 @@ const Profile = () => {
             </p>
           </div>
           <div className="md:w-4/5 w-full px-5 mt-5">
-            {tab === "profile" && <ProfileSettigsTab />}
-            {tab === "theme" && <ThemeSettigsTab />}
-            {tab === "posts" && <PostsSettigsTab />}
-            {tab === "social" && <SocialSettigsTab />}
+            <ProfileContets tab={tab} />
           </div>
         </div>
       </div>
