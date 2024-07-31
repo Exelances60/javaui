@@ -29,7 +29,7 @@ const ProfileContets = ({ tab }: { tab: string }) => {
       {tab === "theme" && <ThemeSettigsTab />}
       {tab === "posts" && <PostsSettigsTab />}
       {tab === "social" && (
-        <SocialSettigsTab socialMedia={userInfo?.socialMedia} />
+        <SocialSettigsTab socialMedia={userInfo?.socialMedia || []} />
       )}
     </>
   );

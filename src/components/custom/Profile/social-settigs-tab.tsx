@@ -5,7 +5,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -36,10 +35,14 @@ const SocialSettigsTab = ({ socialMedia }: SocialSettigsTabProps) => {
     mode: "onChange",
     resolver: zodResolver(formSchema),
     defaultValues: {
-      twitter: "",
-      instagram: "",
-      linkedin: "",
-      facebook: "",
+      twitter:
+        socialMedia.find((s) => s.platform === "Twitter")?.accountLink || "",
+      instagram:
+        socialMedia.find((s) => s.platform === "Instagram")?.accountLink || "",
+      linkedin:
+        socialMedia.find((s) => s.platform === "Linkedin")?.accountLink || "",
+      facebook:
+        socialMedia.find((s) => s.platform === "Facebook")?.accountLink || "",
     },
   });
 
@@ -84,6 +87,16 @@ const SocialSettigsTab = ({ socialMedia }: SocialSettigsTabProps) => {
               >
                 Ekle
               </Button>
+              {form.getValues("twitter") && (
+                <Button
+                  variant="destructive"
+                  size={"sm"}
+                  className="px-5"
+                  onClick={() => form.setValue("twitter", "")}
+                >
+                  Sil
+                </Button>
+              )}
             </div>
 
             <div className="flex gap-2">
@@ -113,6 +126,16 @@ const SocialSettigsTab = ({ socialMedia }: SocialSettigsTabProps) => {
               >
                 Ekle
               </Button>
+              {form.getValues("instagram") && (
+                <Button
+                  variant="destructive"
+                  size={"sm"}
+                  className="px-5"
+                  onClick={() => form.setValue("instagram", "")}
+                >
+                  Sil
+                </Button>
+              )}
             </div>
 
             <div className="flex gap-2">
@@ -142,12 +165,23 @@ const SocialSettigsTab = ({ socialMedia }: SocialSettigsTabProps) => {
               >
                 Ekle
               </Button>
+              {form.getValues("linkedin") && (
+                <Button
+                  variant="destructive"
+                  size={"sm"}
+                  className="px-5"
+                  onClick={() => form.setValue("linkedin", "")}
+                >
+                  Sil
+                </Button>
+              )}
             </div>
 
             <div className="flex gap-2">
               <FormField
                 control={form.control}
                 name="facebook"
+                disabled={Boolean(form.getValues("facebook"))}
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
@@ -171,6 +205,16 @@ const SocialSettigsTab = ({ socialMedia }: SocialSettigsTabProps) => {
               >
                 Ekle
               </Button>
+              {form.getValues("facebook") && (
+                <Button
+                  variant="destructive"
+                  size={"sm"}
+                  className="px-5"
+                  onClick={() => form.setValue("facebook", "")}
+                >
+                  Sil
+                </Button>
+              )}
             </div>
           </form>
         </Form>
