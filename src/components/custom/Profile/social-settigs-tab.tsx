@@ -8,7 +8,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
 import { ISocialMedia } from "@/hooks/useUserInfo";
+import axiosInstance from "@/lib/axios";
+import { formatErrors } from "@/utils/format-erros";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   InstagramLogoIcon,
@@ -24,30 +27,43 @@ interface SocialSettigsTabProps {
 }
 
 const formSchema = z.object({
-  twitter: z.string().optional().or(z.literal("")),
-  instagram: z.string().optional().or(z.literal("")),
-  linkedin: z.string().optional().or(z.literal("")),
-  facebook: z.string().optional().or(z.literal("")),
+  Twitter: z.string().optional().or(z.literal("")),
+  Instagram: z.string().optional().or(z.literal("")),
+  LinkedIn: z.string().optional().or(z.literal("")),
+  Facebook: z.string().optional().or(z.literal("")),
 });
 
 const SocialSettigsTab = ({ socialMedia }: SocialSettigsTabProps) => {
+  const { toast } = useToast();
   const form = useForm<z.infer<typeof formSchema>>({
     mode: "onChange",
     resolver: zodResolver(formSchema),
     defaultValues: {
-      twitter:
+      Twitter:
         socialMedia.find((s) => s.platform === "Twitter")?.accountLink || "",
-      instagram:
+      Instagram:
         socialMedia.find((s) => s.platform === "Instagram")?.accountLink || "",
-      linkedin:
+      LinkedIn:
         socialMedia.find((s) => s.platform === "Linkedin")?.accountLink || "",
-      facebook:
+      Facebook:
         socialMedia.find((s) => s.platform === "Facebook")?.accountLink || "",
     },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    try {
+      const response = await axiosInstance.post("/social-media/save", {
+        socialMediaAccounts: { ...values },
+      });
+      console.log(response.data);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      toast({
+        title: "Hata",
+        description: formatErrors(error.response.data),
+        variant: "destructive",
+      });
+    }
   }
 
   return (
@@ -62,7 +78,7 @@ const SocialSettigsTab = ({ socialMedia }: SocialSettigsTabProps) => {
             <div className="flex gap-2">
               <FormField
                 control={form.control}
-                name="twitter"
+                name="Twitter"
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
@@ -87,12 +103,12 @@ const SocialSettigsTab = ({ socialMedia }: SocialSettigsTabProps) => {
               >
                 Ekle
               </Button>
-              {form.getValues("twitter") && (
+              {form.getValues("Twitter") && (
                 <Button
                   variant="destructive"
                   size={"sm"}
                   className="px-5"
-                  onClick={() => form.setValue("twitter", "")}
+                  onClick={() => form.setValue("Twitter", "")}
                 >
                   Sil
                 </Button>
@@ -102,7 +118,7 @@ const SocialSettigsTab = ({ socialMedia }: SocialSettigsTabProps) => {
             <div className="flex gap-2">
               <FormField
                 control={form.control}
-                name="instagram"
+                name="Instagram"
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
@@ -126,12 +142,12 @@ const SocialSettigsTab = ({ socialMedia }: SocialSettigsTabProps) => {
               >
                 Ekle
               </Button>
-              {form.getValues("instagram") && (
+              {form.getValues("Instagram") && (
                 <Button
                   variant="destructive"
                   size={"sm"}
                   className="px-5"
-                  onClick={() => form.setValue("instagram", "")}
+                  onClick={() => form.setValue("Instagram", "")}
                 >
                   Sil
                 </Button>
@@ -141,7 +157,7 @@ const SocialSettigsTab = ({ socialMedia }: SocialSettigsTabProps) => {
             <div className="flex gap-2">
               <FormField
                 control={form.control}
-                name="linkedin"
+                name="LinkedIn"
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
@@ -165,12 +181,12 @@ const SocialSettigsTab = ({ socialMedia }: SocialSettigsTabProps) => {
               >
                 Ekle
               </Button>
-              {form.getValues("linkedin") && (
+              {form.getValues("LinkedIn") && (
                 <Button
                   variant="destructive"
                   size={"sm"}
                   className="px-5"
-                  onClick={() => form.setValue("linkedin", "")}
+                  onClick={() => form.setValue("LinkedIn", "")}
                 >
                   Sil
                 </Button>
@@ -180,8 +196,7 @@ const SocialSettigsTab = ({ socialMedia }: SocialSettigsTabProps) => {
             <div className="flex gap-2">
               <FormField
                 control={form.control}
-                name="facebook"
-                disabled={Boolean(form.getValues("facebook"))}
+                name="Facebook"
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
@@ -205,12 +220,12 @@ const SocialSettigsTab = ({ socialMedia }: SocialSettigsTabProps) => {
               >
                 Ekle
               </Button>
-              {form.getValues("facebook") && (
+              {form.getValues("Facebook") && (
                 <Button
                   variant="destructive"
                   size={"sm"}
                   className="px-5"
-                  onClick={() => form.setValue("facebook", "")}
+                  onClick={() => form.setValue("Facebook", "")}
                 >
                   Sil
                 </Button>
