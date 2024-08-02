@@ -38,16 +38,18 @@ const SocialSettigsTab = ({ socialMedia }: SocialSettigsTabProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     mode: "onChange",
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      Twitter:
-        socialMedia.find((s) => s.platform === "Twitter")?.accountLink || "",
-      Instagram:
-        socialMedia.find((s) => s.platform === "Instagram")?.accountLink || "",
-      LinkedIn:
-        socialMedia.find((s) => s.platform === "Linkedin")?.accountLink || "",
-      Facebook:
-        socialMedia.find((s) => s.platform === "Facebook")?.accountLink || "",
-    },
+    defaultValues: socialMedia.reduce(
+      (acc, { platform, accountLink }) => {
+        acc[platform as keyof typeof acc] = accountLink || "";
+        return acc;
+      },
+      {
+        Twitter: "",
+        Instagram: "",
+        LinkedIn: "",
+        Facebook: "",
+      }
+    ),
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -55,7 +57,11 @@ const SocialSettigsTab = ({ socialMedia }: SocialSettigsTabProps) => {
       const response = await axiosInstance.post("/social-media/save", {
         socialMediaAccounts: { ...values },
       });
-      console.log(response.data);
+      toast({
+        title: "Başarılı",
+        description: response.data.message,
+        variant: "success",
+      });
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       toast({
@@ -66,6 +72,13 @@ const SocialSettigsTab = ({ socialMedia }: SocialSettigsTabProps) => {
     }
   }
 
+  const platforms = [
+    { name: "Twitter", icon: TwitterLogoIcon, placeholder: "Twitter" },
+    { name: "Instagram", icon: InstagramLogoIcon, placeholder: "Instagram" },
+    { name: "LinkedIn", icon: LinkedInLogoIcon, placeholder: "LinkedIn" },
+    { name: "Facebook", icon: Facebook, placeholder: "Facebook" },
+  ];
+
   return (
     <BlurFade>
       <div className="flex flex-col gap-2">
@@ -75,162 +88,51 @@ const SocialSettigsTab = ({ socialMedia }: SocialSettigsTabProps) => {
             onSubmit={form.handleSubmit(onSubmit)}
             className="flex flex-col gap-2"
           >
-            <div className="flex gap-2">
-              <FormField
-                control={form.control}
-                name="Twitter"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        icon={TwitterLogoIcon}
-                        placeholder="Twitter"
-                        className="w-96"
-                        type="url"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <Button
-                variant="secondary"
-                size={"sm"}
-                className="px-5"
-                type="submit"
-              >
-                Ekle
-              </Button>
-              {form.getValues("Twitter") && (
+            {platforms.map(({ name, icon, placeholder }) => (
+              <div key={name} className="flex gap-2">
+                <FormField
+                  control={form.control}
+                  name={name as keyof z.infer<typeof formSchema>}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          icon={icon}
+                          placeholder={placeholder}
+                          className="w-96"
+                          type="url"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <Button
-                  variant="destructive"
+                  variant="secondary"
                   size={"sm"}
                   className="px-5"
-                  onClick={() => form.setValue("Twitter", "")}
+                  type="submit"
                 >
-                  Sil
+                  Ekle
                 </Button>
-              )}
-            </div>
-
-            <div className="flex gap-2">
-              <FormField
-                control={form.control}
-                name="Instagram"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        icon={InstagramLogoIcon}
-                        placeholder="Instagram"
-                        className="w-96"
-                        type="url"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
+                {form.getValues(name as keyof z.infer<typeof formSchema>) && (
+                  <Button
+                    variant="destructive"
+                    size={"sm"}
+                    className="px-5"
+                    onClick={() =>
+                      form.setValue(
+                        name as keyof z.infer<typeof formSchema>,
+                        ""
+                      )
+                    }
+                  >
+                    Sil
+                  </Button>
                 )}
-              />
-              <Button
-                variant="secondary"
-                size={"sm"}
-                className="px-5"
-                type="submit"
-              >
-                Ekle
-              </Button>
-              {form.getValues("Instagram") && (
-                <Button
-                  variant="destructive"
-                  size={"sm"}
-                  className="px-5"
-                  onClick={() => form.setValue("Instagram", "")}
-                >
-                  Sil
-                </Button>
-              )}
-            </div>
-
-            <div className="flex gap-2">
-              <FormField
-                control={form.control}
-                name="LinkedIn"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        icon={LinkedInLogoIcon}
-                        placeholder="LinkedIn"
-                        className="w-96"
-                        type="url"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button
-                variant="secondary"
-                size={"sm"}
-                className="px-5"
-                type="submit"
-              >
-                Ekle
-              </Button>
-              {form.getValues("LinkedIn") && (
-                <Button
-                  variant="destructive"
-                  size={"sm"}
-                  className="px-5"
-                  onClick={() => form.setValue("LinkedIn", "")}
-                >
-                  Sil
-                </Button>
-              )}
-            </div>
-
-            <div className="flex gap-2">
-              <FormField
-                control={form.control}
-                name="Facebook"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        icon={Facebook}
-                        placeholder="Facebook"
-                        className="w-96"
-                        type="url"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button
-                variant="secondary"
-                size={"sm"}
-                className="px-5"
-                type="submit"
-              >
-                Ekle
-              </Button>
-              {form.getValues("Facebook") && (
-                <Button
-                  variant="destructive"
-                  size={"sm"}
-                  className="px-5"
-                  onClick={() => form.setValue("Facebook", "")}
-                >
-                  Sil
-                </Button>
-              )}
-            </div>
+              </div>
+            ))}
           </form>
         </Form>
       </div>

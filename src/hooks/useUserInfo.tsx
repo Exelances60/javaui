@@ -8,7 +8,11 @@ export interface ISocialMedia {
   accountLink: string;
 }
 
-type ISocialMedaiPlartform = "Facebook" | "Twitter" | "Instagram" | "Linkedin";
+export type ISocialMedaiPlartform =
+  | "Facebook"
+  | "Twitter"
+  | "Instagram"
+  | "Linkedin";
 
 export interface UserInfo {
   id: number;
