@@ -11,7 +11,7 @@ const ProfileContets = ({ tab }: { tab: string }) => {
 
   if (isLoading) {
     return (
-      <div className="w-full h-full flex gap-2 ">
+      <div className="w-full h-full flex gap-2 md:flex-wrap">
         <SkeletonCard />
         <SkeletonCard />
         <SkeletonCard />
