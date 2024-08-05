@@ -1,6 +1,9 @@
+import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/context/auth-contex";
 import axiosInstance from "@/lib/axios";
-import { useQuery } from "@tanstack/react-query";
+import { IBaseResponse } from "@/types/base-response";
+import { formatErrors } from "@/utils/format-erros";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 export interface ISocialMedia {
   id: number;
@@ -53,4 +56,39 @@ export const useGetUserInfo = () => {
     isLoading,
     isError,
   };
+};
+
+const deleteSocialMedia = async (id: number) => {
+  if (!id) {
+    throw new Error("ID bulunamadı.");
+  }
+  try {
+    const response = await axiosInstance.delete(`/social-media/delete/${id}`);
+    return response.data;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    throw new Error(error.response.data.message);
+  }
+};
+
+export const useDeleteSocialMedia = () => {
+  const { toast } = useToast();
+  return useMutation<IBaseResponse<string>, Error, number>({
+    mutationFn: deleteSocialMedia,
+    onSuccess: (data) => {
+      toast({
+        title: "Başarılı",
+        description: data.message,
+        variant: "info",
+      });
+    },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onError: (error: any) => {
+      toast({
+        title: "Hata",
+        description: formatErrors(error),
+        variant: "destructive",
+      });
+    },
+  });
 };

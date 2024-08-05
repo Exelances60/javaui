@@ -15,7 +15,7 @@ const RegisterLazy = React.lazy(() => import("./pages/Register/register"));
 const HomeLazy = React.lazy(() => import("./pages/Home/home"));
 const ProfileLazy = React.lazy(() => import("./pages/Profile/profile"));
 
-const queryClient = new QueryClient();
+export const queryClient = new QueryClient();
 
 function App() {
   return (

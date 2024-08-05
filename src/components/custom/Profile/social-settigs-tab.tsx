@@ -1,3 +1,4 @@
+import { queryClient } from "@/App";
 import BlurFade from "@/components/magicui/blur-fade";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,7 +10,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { ISocialMedia } from "@/hooks/useUserInfo";
+import { ISocialMedia, useDeleteSocialMedia } from "@/hooks/useUserInfo";
 import axiosInstance from "@/lib/axios";
 import { formatErrors } from "@/utils/format-erros";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -35,6 +36,7 @@ const formSchema = z.object({
 
 const SocialSettigsTab = ({ socialMedia }: SocialSettigsTabProps) => {
   const { toast } = useToast();
+  const { mutate, isSuccess: deleteSucces } = useDeleteSocialMedia();
   const form = useForm<z.infer<typeof formSchema>>({
     mode: "onChange",
     resolver: zodResolver(formSchema),
@@ -62,6 +64,7 @@ const SocialSettigsTab = ({ socialMedia }: SocialSettigsTabProps) => {
         description: response.data.message,
         variant: "success",
       });
+      queryClient.invalidateQueries({ queryKey: ["user"] });
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       toast({
@@ -71,6 +74,22 @@ const SocialSettigsTab = ({ socialMedia }: SocialSettigsTabProps) => {
       });
     }
   }
+
+  const deleteSocialMedia = async (name: string) => {
+    const id = socialMedia.find((x) => x.platform === name)?.id;
+    if (id !== undefined) {
+      mutate(id);
+      if (!deleteSucces) {
+        form.setValue(name as keyof z.infer<typeof formSchema>, "");
+      }
+    } else {
+      toast({
+        title: "Hata",
+        description: "Silinecek sosyal medya hesabı bulunamadı.",
+        variant: "destructive",
+      });
+    }
+  };
 
   const platforms = [
     { name: "Twitter", icon: TwitterLogoIcon, placeholder: "Twitter" },
@@ -121,12 +140,8 @@ const SocialSettigsTab = ({ socialMedia }: SocialSettigsTabProps) => {
                     variant="destructive"
                     size={"sm"}
                     className="px-5"
-                    onClick={() =>
-                      form.setValue(
-                        name as keyof z.infer<typeof formSchema>,
-                        ""
-                      )
-                    }
+                    type="button" // <-- Buraya type="button" ekledik
+                    onClick={() => deleteSocialMedia(name)}
                   >
                     Sil
                   </Button>
