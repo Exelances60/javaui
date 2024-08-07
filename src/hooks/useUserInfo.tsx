@@ -1,3 +1,4 @@
+import { queryClient } from "@/App";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/context/auth-contex";
 import axiosInstance from "@/lib/axios";
@@ -21,6 +22,8 @@ export interface UserInfo {
   id: number;
   fullName: string;
   email: string;
+  phone: string;
+  job: string;
   socialMedia: ISocialMedia[];
 }
 
@@ -73,6 +76,7 @@ const deleteSocialMedia = async (id: number) => {
 
 export const useDeleteSocialMedia = () => {
   const { toast } = useToast();
+  const { user } = useAuth();
   return useMutation<IBaseResponse<string>, Error, number>({
     mutationFn: deleteSocialMedia,
     onSuccess: (data) => {
@@ -80,6 +84,14 @@ export const useDeleteSocialMedia = () => {
         title: "Başarılı",
         description: data.message,
         variant: "info",
+      });
+    },
+    onMutate(variables) {
+      queryClient.setQueryData(["user", user?.id], (oldData: UserInfo) => {
+        return {
+          ...oldData,
+          socialMedia: oldData.socialMedia.filter((x) => x.id !== variables),
+        };
       });
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

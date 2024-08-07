@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
+import { useAuth } from "@/context/auth-contex";
 import { ISocialMedia, useDeleteSocialMedia } from "@/hooks/useUserInfo";
 import axiosInstance from "@/lib/axios";
 import { formatErrors } from "@/utils/format-erros";
@@ -37,6 +38,7 @@ const formSchema = z.object({
 const SocialSettigsTab = ({ socialMedia }: SocialSettigsTabProps) => {
   const { toast } = useToast();
   const { mutate, isSuccess: deleteSucces } = useDeleteSocialMedia();
+  const { user } = useAuth();
   const form = useForm<z.infer<typeof formSchema>>({
     mode: "onChange",
     resolver: zodResolver(formSchema),
@@ -64,7 +66,7 @@ const SocialSettigsTab = ({ socialMedia }: SocialSettigsTabProps) => {
         description: response.data.message,
         variant: "success",
       });
-      queryClient.invalidateQueries({ queryKey: ["user"] });
+      queryClient.invalidateQueries({ queryKey: ["user", user?.id] });
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       toast({
