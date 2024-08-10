@@ -25,7 +25,11 @@ const SettigsProfileCard = () => {
   return (
     <div className="flex gap-2 items-center">
       <img
-        src={userInfo?.image || "/profile.png"}
+        src={
+          userInfo?.image
+            ? userInfo.image
+            : "https://www.w3schools.com/howto/img_avatar.png"
+        }
         alt="profile"
         className="rounded-lg w-20 h-16 object-cover drop-shadow-md"
       />

@@ -6,6 +6,7 @@ export function formatErrors(data: {
   data?: unknown;
 }) {
   if (data.errors) {
+    console.log(data.errors);
     return Object.values(data.errors).join(", ");
   }
   return data.message;
