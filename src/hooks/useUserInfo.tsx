@@ -19,6 +19,7 @@ export type ISocialMedaiPlartform =
   | "Linkedin";
 
 export interface UserInfo {
+  image?: string;
   id: number;
   fullName: string;
   email: string;

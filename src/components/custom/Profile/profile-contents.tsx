@@ -1,5 +1,5 @@
 import ThemeSettigsTab from "@/components/custom/Profile/theme-settigs-tab";
-import ProfileSettigsTab from "@/components/custom/Profile/profile-settigs-tab";
+import ProfileSettigsTab from "@/components/custom/Profile/profile-settigs/profile-settigs-tab";
 import PostsSettigsTab from "@/components/custom/Profile/post-settigs.tab";
 import SocialSettigsTab from "@/components/custom/Profile/social-settigs-tab";
 import { useGetUserInfo } from "@/hooks/useUserInfo";

@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
-
 import { cn } from "@/lib/utils";
 import { LoadingSpinner } from "../loading";
 
@@ -39,7 +38,7 @@ export interface ButtonProps
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
   loading?: boolean;
-  icon?: React.ReactNode;
+  icon?: React.ElementType;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -49,7 +48,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       variant,
       size,
       children,
-      icon,
+      icon: Icon,
       loading,
       asChild = false,
       ...props
@@ -57,6 +56,37 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const Comp = asChild ? Slot : "button";
+
+    if (loading) {
+      return (
+        <Comp
+          className={cn(buttonVariants({ variant, size, className }))}
+          ref={ref}
+          {...props}
+          disabled={loading || props.disabled}
+          style={{ display: "flex", gap: "2px", justifyContent: "center" }}
+        >
+          <LoadingSpinner className="w-4 h-4 mr-1 " />
+          {children}
+        </Comp>
+      );
+    }
+
+    if (Icon) {
+      return (
+        <Comp
+          className={cn(buttonVariants({ variant, size, className }))}
+          ref={ref}
+          {...props}
+          disabled={loading || props.disabled}
+          style={{ display: "flex", gap: "2px", justifyContent: "center" }}
+        >
+          <Icon className="h-4 w-4 mr-1" />
+          {children}
+        </Comp>
+      );
+    }
+
     return (
       <Comp
         className={cn(buttonVariants({ variant, size, className }))}
@@ -65,19 +95,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         disabled={loading || props.disabled}
         style={{ display: "flex", gap: "2px", justifyContent: "center" }}
       >
-        {loading ? (
-          <>
-            <LoadingSpinner className="w-5 h-5 mr-1 " />
-            {children}
-          </>
-        ) : icon ? (
-          <>
-            {icon}
-            {children}
-          </>
-        ) : (
-          children
-        )}
+        {children}
       </Comp>
     );
   }
