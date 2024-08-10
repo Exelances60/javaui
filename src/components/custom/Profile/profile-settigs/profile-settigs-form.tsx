@@ -1,5 +1,5 @@
 import { Form } from "@/components/ui/form";
-import { useGetUserInfo } from "@/hooks/useUserInfo";
+import { useGetUserInfo, useUpdateUserInfo } from "@/hooks/useUserInfo";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -14,27 +14,33 @@ import {
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import FormInput from "../../form-input";
+import { ImageUploader } from "@/components/image-uploader";
 
 const ProfileSettigsForm = () => {
   const { userInfo } = useGetUserInfo();
+  const { mutate: updateUser } = useUpdateUserInfo();
   const [isEdit, setIsEdit] = useState(false);
 
   const profileFormSchema = z.object({
-    image: z.string().optional(),
+    image: z.any().optional(),
     email: z.string().email({ message: "Geçerli bir email adresi giriniz" }),
     fullName: z.string().min(1, { message: "İsim soyisim alanı zorunludur" }),
     job: z.string().optional(),
     phone: z
       .string()
-      .min(10, { message: "Telefon numarası alanı zorunludur" })
-      .optional(),
+      .optional()
+      .or(
+        z
+          .string()
+          .length(11, { message: "Telefon numarası 11 haneli olmalıdır" })
+      ),
   });
 
   const profileForm = useForm<z.infer<typeof profileFormSchema>>({
     mode: "onChange",
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
-      image: userInfo?.image || "",
+      image: "",
       email: userInfo?.email || "",
       fullName: userInfo?.fullName || "",
       job: userInfo?.job || "",
@@ -42,8 +48,13 @@ const ProfileSettigsForm = () => {
     },
   });
 
-  const onSubmit = (data: z.infer<typeof profileFormSchema>) => {
-    console.log(data);
+  const onSubmit = async (data: z.infer<typeof profileFormSchema>) => {
+    try {
+      updateUser(data);
+      setIsEdit(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -66,12 +77,11 @@ const ProfileSettigsForm = () => {
               </Button>
             </div>
           </div>
-          <div className="flex flex-col gap-2 w-[300px]">
-            <FormInput
+          <div className="flex flex-col gap-2 w-[400px]">
+            <ImageUploader
               control={profileForm.control}
               name="image"
-              label="Profil Fotoğrafı"
-              type="file"
+              isEdit={isEdit}
             />
 
             <FormInput
@@ -82,7 +92,6 @@ const ProfileSettigsForm = () => {
               icon={Mail}
               disabled={!isEdit}
             />
-
             <FormInput
               control={profileForm.control}
               name="fullName"
@@ -90,7 +99,6 @@ const ProfileSettigsForm = () => {
               icon={PersonStandingIcon}
               disabled={!isEdit}
             />
-
             <FormInput
               control={profileForm.control}
               name="job"
@@ -98,7 +106,6 @@ const ProfileSettigsForm = () => {
               icon={Briefcase}
               disabled={!isEdit}
             />
-
             <FormInput
               control={profileForm.control}
               name="phone"

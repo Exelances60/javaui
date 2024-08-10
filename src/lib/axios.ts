@@ -19,4 +19,30 @@ axiosInstance.interceptors.request.use(
   }
 );
 
+axiosInstance.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  async (error) => {
+    if (error.response?.status === 401) {
+      const cookies = new Cookies();
+      cookies.remove("token");
+      window.location.href = "/login";
+    }
+    if (error.response?.data) {
+      return Promise.reject(error);
+    }
+    if (!error.response) {
+      return Promise.reject({
+        ...error,
+        response: {
+          data: {
+            message: "Sunucu ile bağlantı kurulamadı",
+          },
+        },
+      });
+    }
+  }
+);
+
 export default axiosInstance;

@@ -9,6 +9,9 @@ import { SkeletonCard } from "@/components/skeleton-card";
 const ProfileContets = ({ tab }: { tab: string }) => {
   const { error, isError, isLoading, userInfo } = useGetUserInfo();
 
+  if (isError) {
+    return <ErrorAlert error={error as Error} />;
+  }
   if (isLoading) {
     return (
       <div className="w-full h-full flex gap-2 md:flex-wrap md:overflow-hidden">
@@ -17,10 +20,6 @@ const ProfileContets = ({ tab }: { tab: string }) => {
         <SkeletonCard />
       </div>
     );
-  }
-
-  if (isError) {
-    return <ErrorAlert error={error as Error} />;
   }
 
   return (

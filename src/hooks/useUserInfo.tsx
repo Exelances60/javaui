@@ -105,3 +105,73 @@ export const useDeleteSocialMedia = () => {
     },
   });
 };
+
+type UpdateUserInfoData = {
+  email: string;
+  fullName: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  image?: any;
+  job?: string;
+  phone?: string;
+};
+
+const updateUserInfo = async (data: UpdateUserInfoData, userId: number) => {
+  try {
+    const response = await axiosInstance.putForm(
+      "/user/update-user",
+      {
+        ...data,
+        phone: data.phone || null,
+        image: data.image || null,
+        job: data.job || null,
+      },
+      {
+        params: {
+          id: userId,
+        },
+      }
+    );
+    return response.data;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    throw new Error(error.response.data.message);
+  }
+};
+
+export const useUpdateUserInfo = () => {
+  const { toast } = useToast();
+  const { user } = useAuth();
+
+  return useMutation<IBaseResponse<UserInfo>, Error, UpdateUserInfoData>({
+    mutationFn: (data) => {
+      const userId = user?.id;
+      if (!userId) {
+        throw new Error("Kullanıcı ID'si bulunamadı.");
+      }
+      return updateUserInfo(data, +userId);
+    },
+    onSuccess: (data) => {
+      toast({
+        title: "Başarılı",
+        description: data.message,
+        variant: "success",
+      });
+    },
+    onSettled(data, error) {
+      if (!error) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        queryClient.setQueryData(["user", user?.id], (_oldData: UserInfo) => {
+          return data?.data;
+        });
+      }
+    },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onError: (error: any) => {
+      toast({
+        title: "Hata",
+        description: formatErrors(error),
+        variant: "destructive",
+      });
+    },
+  });
+};

@@ -27,6 +27,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         </div>
       );
     }
+
     return (
       <input
         type={type}
