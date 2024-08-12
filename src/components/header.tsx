@@ -1,18 +1,18 @@
-import React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, Search, Dumbbell } from "lucide-react";
+import { Menu, Search, Dumbbell, Plus } from "lucide-react";
 import { ModeToggle } from "./mode-toggle";
 import AvatarDropdown from "./avatar-dropdown";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
 const Header = () => {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   return (
-    <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6 z-50">
-      <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6 w-full">
+    <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6 md:py-0 py-6 z-50">
+      <nav className="hidden flex-col gap-6 text-lg font-medium lg:flex lg:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6 w-full">
         <Link
           to="/home"
           className={cn(
@@ -62,20 +62,20 @@ const Header = () => {
         <Link
           to={"/antreman-programlari"}
           className={cn(
-            "text-muted-foreground transition-colors hover:text-foreground",
+            "text-muted-foreground transition-colors hover:text-foreground ",
             pathname === "/antreman-programlari" && "text-foreground"
           )}
         >
           Antreman Programları
         </Link>
       </nav>
-      <div className="flex items-center gap-4 md:hidden">
+      <div className="flex items-center gap-4 lg:hidden">
         <Sheet>
           <SheetTrigger asChild>
             <Button
               variant="outline"
               size="icon"
-              className="shrink-0 md:hidden"
+              className="shrink-0 lg:hidden"
             >
               <Menu className="h-5 w-5 " />
               <span className="sr-only">Toggle navigation menu</span>
@@ -143,7 +143,18 @@ const Header = () => {
         </Sheet>
       </div>
       <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
-        <form className="ml-auto flex-1 sm:flex-initial">
+        <form className="ml-auto flex-1 sm:flex-initial flex gap-5">
+          <Button
+            type="button"
+            icon={Plus}
+            size={"sm"}
+            variant={"outline"}
+            onClick={() => {
+              navigate("/create-post");
+            }}
+          >
+            Post Ekle
+          </Button>
           <div className="relative">
             <Input icon={Search} placeholder="Search..." />
           </div>

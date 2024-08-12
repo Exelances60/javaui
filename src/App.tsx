@@ -9,12 +9,14 @@ import { AuthProvider } from "./context/auth-contex";
 import NotFoundPage from "./pages/404";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import CreatePost from "./pages/CreatePost/create-post";
 
 const LoginLazy = React.lazy(() => import("./pages/Login/login"));
 const RegisterLazy = React.lazy(() => import("./pages/Register/register"));
 const HomeLazy = React.lazy(() => import("./pages/Home/home"));
 const ProfileLazy = React.lazy(() => import("./pages/Profile/profile"));
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const queryClient = new QueryClient();
 
 function App() {
@@ -36,6 +38,7 @@ function App() {
                 <Route element={<Layout />}>
                   <Route path="/home" element={<HomeLazy />} />
                   <Route path="/profile" element={<ProfileLazy />} />
+                  <Route path="/create-post" element={<CreatePost />} />
                 </Route>
                 <Route path="*" element={<NotFoundPage />} />
               </Routes>

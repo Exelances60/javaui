@@ -77,7 +77,7 @@ const ProfileSettigsForm = () => {
               </Button>
             </div>
           </div>
-          <div className="flex flex-col gap-2 w-[400px]">
+          <div className="flex flex-col gap-2 lg:w-[400px] w-[300px]">
             <ImageUploader
               control={profileForm.control}
               name="image"

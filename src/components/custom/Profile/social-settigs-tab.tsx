@@ -121,7 +121,7 @@ const SocialSettigsTab = ({ socialMedia }: SocialSettigsTabProps) => {
                           {...field}
                           icon={icon}
                           placeholder={placeholder}
-                          className="w-96"
+                          className="md:w-96 w-60 "
                           type="url"
                         />
                       </FormControl>
