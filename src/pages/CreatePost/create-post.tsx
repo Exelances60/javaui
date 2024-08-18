@@ -1,96 +1,83 @@
 import { PostDock } from "@/components/post-dock";
-import { useState, useEffect } from "react";
-
-export interface PostContent {
-  type: "text" | "image";
-  content: string;
-  setter: boolean;
-  active: boolean;
-}
+import Document from "@tiptap/extension-document";
+import Image from "@tiptap/extension-image";
+import BulletList from "@tiptap/extension-bullet-list";
+import ListItem from "@tiptap/extension-list-item";
+import OrderedList from "@tiptap/extension-ordered-list";
+import StarterKit from "@tiptap/starter-kit";
+import Text from "@tiptap/extension-text";
+import TextStyle from "@tiptap/extension-text-style";
+import { EditorContent, useEditor } from "@tiptap/react";
+import Youtube from "@tiptap/extension-youtube";
+import FontFamily from "@tiptap/extension-font-family";
+import ImageResize from "tiptap-extension-resize-image";
+import "./styles.scss";
+import { Input } from "@/components/ui/input";
+import PostTools from "./post-tools";
+import Placeholder from "@tiptap/extension-placeholder";
 
 const CreatePost = () => {
-  const [postContent, setPostContent] = useState<PostContent[]>([]);
+  const editor = useEditor({
+    extensions: [
+      Document,
+      Image,
+      ImageResize,
+      BulletList,
+      ListItem,
+      Text,
+      TextStyle,
+      FontFamily,
+      OrderedList,
+      Youtube,
+      Placeholder.configure({
+        placeholder: "Write something …",
+      }),
+      StarterKit.configure({
+        heading: {
+          levels: [1, 2, 3],
+        },
+      }),
+    ],
+    content: `
+    `,
+    editable: true,
+  });
 
-  const resizeTextArea = (textarea: HTMLTextAreaElement) => {
-    if (textarea) {
-      textarea.style.height = "auto";
-      textarea.style.height = `${textarea.scrollHeight}px`;
+  if (!editor) {
+    return null;
+  }
+
+  const addImage = () => {
+    const url = window.prompt("URL");
+    if (url) {
+      editor.chain().focus().insertContent(`<img src="${url}" />`).run();
     }
   };
 
-  useEffect(() => {
-    postContent.forEach((content, index) => {
-      if (content.type === "text" && content.setter) {
-        const textarea = document.getElementById(
-          `textarea-${index}`
-        ) as HTMLTextAreaElement;
-        if (textarea) {
-          resizeTextArea(textarea);
-        }
-      }
-    });
-  }, [postContent]);
+  const addYoutubeVideo = () => {
+    const url = prompt("Enter YouTube URL");
+
+    if (url) {
+      editor.commands.setYoutubeVideo({
+        src: url,
+        width: 640,
+        height: 480,
+      });
+    }
+  };
 
   return (
-    <div className="container p-0 flex flex-col gap-2">
-      {postContent.map((content, index) => (
-        <div key={index}>
-          {content.type === "text" ? (
-            <textarea
-              id={`textarea-${index}`}
-              className={`text-black w-full flex items-center resize-none align-middle pt-5 overflow-hidden active:outline-none focus:outline-none ${
-                content.active
-                  ? "border-2 border-dashed border-gray-300 animate-pulse"
-                  : "border-0 "
-              }`}
-              value={content.content}
-              onChange={(e) => {
-                const newPostContent = [...postContent];
-                newPostContent[index].content = e.target.value;
-                setPostContent(newPostContent);
-              }}
-              onFocus={() => {
-                const newPostContent = [...postContent];
-                newPostContent[index].active = true;
-                setPostContent(newPostContent);
-              }}
-              onBlur={() => {
-                const newPostContent = [...postContent];
-                newPostContent[index].active = false;
-                setPostContent(newPostContent);
-              }}
-            />
-          ) : content.type === "image" ? (
-            <div className="flex flex-col">
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => {
-                  const newPostContent = [...postContent];
-                  const reader = new FileReader();
-                  reader.onload = (e) => {
-                    if (e.target) {
-                      newPostContent[index].content = e.target.result as string;
-                      setPostContent(newPostContent);
-                    }
-                  };
-                  if (e.target.files) {
-                    reader.readAsDataURL(e.target.files[0]);
-                  }
-                }}
-              />
-              {content.content && (
-                <img
-                  src={content.content}
-                  alt={`Uploaded ${index}`}
-                  className="w-full h-auto border border-gray-300 rounded-lg mt-2"
-                />
-              )}
-            </div>
-          ) : null}
-        </div>
-      ))}
-      <PostDock setPostContent={setPostContent} />
+    <div className="container min-h-screen h-auto p-5 flex flex-col gap-2">
+      <h1 className="text-2xl font-bold">Post Üreticisi</h1>
+      <Input placeholder="Title" />
+      <PostTools editor={editor}>
+        <EditorContent editor={editor} />
+      </PostTools>
+      <PostDock
+        addImage={addImage}
+        editor={editor}
+        addYoutubeVideo={addYoutubeVideo}
+      />
     </div>
   );
 };
