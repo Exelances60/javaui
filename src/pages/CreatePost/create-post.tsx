@@ -1,3 +1,4 @@
+import "./styles.scss";
 import { PostDock } from "@/components/post-dock";
 import Document from "@tiptap/extension-document";
 import Image from "@tiptap/extension-image";
@@ -11,12 +12,15 @@ import { EditorContent, useEditor } from "@tiptap/react";
 import Youtube from "@tiptap/extension-youtube";
 import FontFamily from "@tiptap/extension-font-family";
 import ImageResize from "tiptap-extension-resize-image";
-import "./styles.scss";
 import { Input } from "@/components/ui/input";
 import PostTools from "./post-tools";
 import Placeholder from "@tiptap/extension-placeholder";
+import { useState } from "react";
+import { useCreatePost } from "@/hooks/usePostQueries";
+import PostConfirm from "./post-confirm";
 
 const CreatePost = () => {
+  const [title, setTitle] = useState("");
   const editor = useEditor({
     extensions: [
       Document,
@@ -42,7 +46,7 @@ const CreatePost = () => {
     `,
     editable: true,
   });
-
+  const { mutate } = useCreatePost();
   if (!editor) {
     return null;
   }
@@ -66,10 +70,27 @@ const CreatePost = () => {
     }
   };
 
+  const publishPost = async (image: string) => {
+    try {
+      const content = editor.getHTML();
+      mutate({ title, content, image });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      console.error(error.message);
+    }
+  };
+
   return (
-    <div className="container min-h-screen h-auto p-5 flex flex-col gap-2">
-      <h1 className="text-2xl font-bold">Post Üreticisi</h1>
-      <Input placeholder="Title" />
+    <div className="container mt-10 min-h-screen h-auto p-5 flex flex-col gap-2">
+      <div className="flex justify-between">
+        <h1 className="text-2xl font-bold">Post Oluşturucusu</h1>
+        <PostConfirm publishPost={publishPost} />
+      </div>
+      <Input
+        placeholder="Title"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+      />
       <PostTools editor={editor}>
         <EditorContent editor={editor} />
       </PostTools>

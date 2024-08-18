@@ -1,54 +1,14 @@
 import BlurFade from "../magicui/blur-fade";
 import SectionCard from "./section-card";
 import Marquee from "../magicui/marquee";
+import { Post } from "@/hooks/usePostQueries";
 
 interface HomeSectionProps {
   title: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  items?: any[];
+  items: Post[];
   reverse?: boolean;
 }
-
-const reviews = [
-  {
-    name: "Jack",
-    username: "@jack",
-    body: "I've never seen anything like this before. It's amazing. I love it.",
-    img: "https://avatar.vercel.sh/jack",
-  },
-  {
-    name: "Jill",
-    username: "@jill",
-    body: "I don't know what to say. I'm speechless. This is amazing.",
-    img: "https://avatar.vercel.sh/jill",
-  },
-  {
-    name: "John",
-    username: "@john",
-    body: "I'm at a loss for words. This is amazing. I love it.",
-    img: "https://avatar.vercel.sh/john",
-  },
-  {
-    name: "Jane",
-    username: "@jane",
-    body: "I'm at a loss for words. This is amazing. I love it.",
-    img: "https://avatar.vercel.sh/jane",
-  },
-  {
-    name: "Jenny",
-    username: "@jenny",
-    body: "I'm at a loss for words. This is amazing. I love it.",
-    img: "https://avatar.vercel.sh/jenny",
-  },
-  {
-    name: "James",
-    username: "@james",
-    body: "I'm at a loss for words. This is amazing. I love it.",
-    img: "https://avatar.vercel.sh/james",
-  },
-];
-
-const firstRow = reviews.slice(0, reviews.length / 2);
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const HomeSection = ({ title, items, reverse }: HomeSectionProps) => {
@@ -58,8 +18,8 @@ const HomeSection = ({ title, items, reverse }: HomeSectionProps) => {
         <h1 className="text-lg mb-2 font-semibold"> {title} </h1>
         <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden rounded-lg border bg-background md:shadow-xl">
           <Marquee pauseOnHover className="[--duration:20s]" reverse={reverse}>
-            {firstRow.map((review) => (
-              <SectionCard key={review.username} {...review} />
+            {items.map((review) => (
+              <SectionCard key={review.id} data={review} />
             ))}
           </Marquee>
 

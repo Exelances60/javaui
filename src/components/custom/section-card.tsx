@@ -1,18 +1,12 @@
 import dummyfood from "@/assets/home/dumyımage.jpg";
+import { Post } from "@/hooks/usePostQueries";
 import { cn } from "@/lib/utils";
-import React from "react";
 
-const SectionCard = ({
-  img,
-  name,
-  username,
-  body,
-}: {
-  img: string;
-  name: string;
-  username: string;
-  body: string;
-}) => {
+interface SectionCardProps {
+  data: Post;
+}
+
+const SectionCard = ({ data }: SectionCardProps) => {
   return (
     <figure
       className={cn(
@@ -25,8 +19,8 @@ const SectionCard = ({
     >
       <div className="absolute inset-0 w-full h-full">
         <img
-          src={dummyfood}
-          alt={name}
+          src={data.image}
+          alt={data.title}
           className="object-cover w-full h-full"
         />
         <div
@@ -42,16 +36,18 @@ const SectionCard = ({
       <div className="relative z-10 p-4 text-white">
         <div className="flex flex-row items-center gap-2 mb-2">
           <img
-            src={img || dummyfood}
-            alt={name}
+            src={dummyfood}
+            alt={data.title}
             className="w-10 h-10 rounded-full"
           />
           <div>
-            <h4 className="text-lg font-semibold">{name}</h4>
-            <p className="text-sm text-white">{username}</p>
+            <h4 className="text-lg font-semibold">{data.author?.fullName}</h4>
+            <p className="text-sm text-white">{data.title}</p>
           </div>
         </div>
-        <blockquote className="text-sm">{body}</blockquote>
+        <blockquote className="text-sm">
+          {data.content.slice(0, 100)}...
+        </blockquote>
       </div>
     </figure>
   );
