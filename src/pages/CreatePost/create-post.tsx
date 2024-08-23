@@ -70,10 +70,11 @@ const CreatePost = () => {
     }
   };
 
-  const publishPost = async (image: string) => {
+  const publishPost = async (image: string, categoryString: string) => {
     try {
       const content = editor.getHTML();
-      mutate({ title, content, image });
+      const categoryId = parseInt(categoryString);
+      mutate({ title, content, image, categoryId });
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.error(error.message);

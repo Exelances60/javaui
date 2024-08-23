@@ -2,12 +2,12 @@ import { useToast } from "@/components/ui/use-toast";
 import axiosGraph from "@/lib/axiosGraph";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { gql } from "graphql-request";
-import { UserInfo } from "./useUserInfo";
 
 export interface ICreatePost {
   title: string;
   content: string;
   image: string;
+  categoryId: number;
 }
 
 interface GraphqlError {
