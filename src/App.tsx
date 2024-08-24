@@ -15,9 +15,16 @@ const LoginLazy = React.lazy(() => import("./pages/Login/login"));
 const RegisterLazy = React.lazy(() => import("./pages/Register/register"));
 const HomeLazy = React.lazy(() => import("./pages/Home/home"));
 const ProfileLazy = React.lazy(() => import("./pages/Profile/profile"));
+const PostPageLazy = React.lazy(() => import("./pages/Post/post-page"));
 
 // eslint-disable-next-line react-refresh/only-export-components
-export const queryClient = new QueryClient();
+export const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 function App() {
   return (
@@ -39,6 +46,7 @@ function App() {
                   <Route path="/home" element={<HomeLazy />} />
                   <Route path="/profile" element={<ProfileLazy />} />
                   <Route path="/create-post" element={<CreatePost />} />
+                  <Route path="/post/:id" element={<PostPageLazy />} />
                 </Route>
                 <Route path="*" element={<NotFoundPage />} />
               </Routes>

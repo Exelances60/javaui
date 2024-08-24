@@ -1,14 +1,20 @@
 import dummyfood from "@/assets/home/dumyımage.jpg";
 import { Post } from "@/hooks/usePostQueries";
 import { cn } from "@/lib/utils";
+import DOMPurify from "dompurify";
+import { useNavigate } from "react-router-dom";
 
 interface SectionCardProps {
   data: Post;
 }
 
 const SectionCard = ({ data }: SectionCardProps) => {
+  console.log(data);
+  const navigate = useNavigate();
+  const cleanHtml = DOMPurify.sanitize(data.content.slice(0, 200));
   return (
     <figure
+      onClick={() => navigate(`/post/${data.id}`)}
       className={cn(
         "relative w-64 cursor-pointer overflow-hidden rounded-xl border shadow",
         // light styles
@@ -36,18 +42,19 @@ const SectionCard = ({ data }: SectionCardProps) => {
       <div className="relative z-10 p-4 text-white">
         <div className="flex flex-row items-center gap-2 mb-2">
           <img
-            src={dummyfood}
+            src={data.author?.image || dummyfood}
             alt={data.title}
-            className="w-10 h-10 rounded-full"
+            className="w-10 h-10 rounded-full object-cover"
           />
           <div>
             <h4 className="text-lg font-semibold">{data.author?.fullName}</h4>
             <p className="text-sm text-white">{data.title}</p>
           </div>
         </div>
-        <blockquote className="text-sm">
-          {data.content.slice(0, 100)}...
-        </blockquote>
+        <blockquote
+          className="text-sm"
+          dangerouslySetInnerHTML={{ __html: cleanHtml }}
+        ></blockquote>
       </div>
     </figure>
   );

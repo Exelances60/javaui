@@ -18,8 +18,10 @@ import Placeholder from "@tiptap/extension-placeholder";
 import { useState } from "react";
 import { useCreatePost } from "@/hooks/usePostQueries";
 import PostConfirm from "./post-confirm";
+import { useToast } from "@/components/ui/use-toast";
 
 const CreatePost = () => {
+  const { toast } = useToast();
   const [title, setTitle] = useState("");
   const editor = useEditor({
     extensions: [
@@ -72,12 +74,19 @@ const CreatePost = () => {
 
   const publishPost = async (image: string, categoryString: string) => {
     try {
+      if (!categoryString) {
+        throw new Error("Kategori seçmelisiniz");
+      }
       const content = editor.getHTML();
       const categoryId = parseInt(categoryString);
       mutate({ title, content, image, categoryId });
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      console.error(error.message);
+      toast({
+        title: "Hata",
+        description: error.message,
+        variant: "destructive",
+      });
     }
   };
 

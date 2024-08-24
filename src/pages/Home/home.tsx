@@ -1,10 +1,9 @@
 import HomeSection from "@/components/custom/home-section";
-import { usePostQueries } from "@/hooks/usePostQueries";
+import { useHomePostQueries } from "@/hooks/usePostQueries";
 import { LoadingSpinner } from "@/components/loading";
 
 const Home = () => {
-  const { postData, isLoading } = usePostQueries();
-  console.log(postData);
+  const { postData, isLoading } = useHomePostQueries();
   if (isLoading)
     return (
       <div className="flex justify-center items-center h-screen">
@@ -12,10 +11,16 @@ const Home = () => {
       </div>
     );
   return (
-    <div className="py-2 flex flex-col gap-3">
-      <HomeSection title="Makaleler" items={postData || []} />
-      {/*     <HomeSection title="Yemek Tarifleri" reverse />
-      <HomeSection title="Makaleler" /> */}
+    <div className="py-2 flex flex-col gap-2">
+      <HomeSection title="Antreman Programları" items={postData?.postProgram} />
+      <HomeSection title="Yemek Tarifleri" reverse items={postData?.postFood} />
+      <HomeSection title="Makaleler" items={postData?.postScience} />
+      <HomeSection
+        title="Öneriler"
+        reverse
+        items={postData?.postSuggestions}
+        style="mb-5"
+      />
     </div>
   );
 };

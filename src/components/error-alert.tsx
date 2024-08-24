@@ -1,9 +1,7 @@
-import React from "react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 
 const ErrorAlert = ({ error }: { error: Error }) => {
-  console.log(error, "errorAlert");
   return (
     <div className="w-full h-full items-center justify-center flex">
       <Alert variant="destructive">

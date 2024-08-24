@@ -1,4 +1,5 @@
 import { useToast } from "@/components/ui/use-toast";
+import axiosInstance from "@/lib/axios";
 import axiosGraph from "@/lib/axiosGraph";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { gql } from "graphql-request";
@@ -25,6 +26,7 @@ export interface Post {
   image: string;
   author?: {
     fullName: string;
+    image: string;
   };
 }
 
@@ -79,6 +81,7 @@ const GET_POSTS_QUERY = gql`
         image
         author {
           fullName
+          image
         }
       }
     }
@@ -102,4 +105,52 @@ export const usePostQueries = () => {
     gcTime: 1000 * 60 * 30,
   });
   return { postData: data, error, isLoading, refetch };
+};
+
+interface IHomePosts {
+  postProgram: Post[];
+  postDiets: Post[];
+  postFood: Post[];
+  postScience: Post[];
+  postSuggestions: Post[];
+}
+
+const getHomePosts = async () => {
+  try {
+    const response = await axiosInstance.get("/post/home-posts");
+    return response.data.data;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    throw error.response.data;
+  }
+};
+
+export const useHomePostQueries = () => {
+  const { data, error, isLoading, refetch } = useQuery<IHomePosts, Error>({
+    queryKey: ["home-posts"],
+    queryFn: getHomePosts,
+    refetchOnWindowFocus: false,
+  });
+  return { postData: data, error, isLoading, refetch };
+};
+
+const getPost = async (id: number) => {
+  try {
+    const response = await axiosInstance.get(`/post/${id}`);
+    return response.data.data;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    throw error.response.data;
+  }
+};
+
+export const usePostById = (id: number) => {
+  const { data, error, isLoading, refetch, isError } = useQuery<Post, Error>({
+    queryKey: ["post", id],
+    queryFn: () => getPost(id),
+    gcTime: 1000 * 60 * 30, // 30 dakika
+    staleTime: 1000 * 60 * 30, // 30 dakika
+    refetchOnWindowFocus: false,
+  });
+  return { postData: data, error, isLoading, refetch, isError };
 };
