@@ -9,7 +9,6 @@ interface SectionCardProps {
 }
 
 const SectionCard = ({ data }: SectionCardProps) => {
-  console.log(data);
   const navigate = useNavigate();
   const cleanHtml = DOMPurify.sanitize(data.content.slice(0, 200));
   return (
@@ -23,7 +22,7 @@ const SectionCard = ({ data }: SectionCardProps) => {
         "dark:border-gray-50/[.1] dark:bg-gray-50/[.10] dark:hover:bg-gray-50/[.15]"
       )}
     >
-      <div className="absolute inset-0 w-full h-full">
+      <div className="absolute inset-0 w-full h-full shadow">
         <img
           src={data.image}
           alt={data.title}
@@ -33,9 +32,9 @@ const SectionCard = ({ data }: SectionCardProps) => {
           className={cn(
             "absolute inset-0 bg-black",
             // light theme overlay
-            "bg-opacity-80",
+            "bg-opacity-70",
             // dark theme overlay
-            "dark:bg-opacity-80"
+            "dark:bg-opacity-70"
           )}
         />
       </div>

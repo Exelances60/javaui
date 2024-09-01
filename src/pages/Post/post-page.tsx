@@ -2,6 +2,7 @@ import { LoadingSpinner } from "@/components/loading";
 import { usePostById } from "@/hooks/usePostQueries";
 import { useParams } from "react-router-dom";
 import DOMPurify from "dompurify";
+import { Badge } from "@/components/ui/badge";
 
 const PostPage = () => {
   const { id } = useParams();
@@ -21,7 +22,9 @@ const PostPage = () => {
 
   if (isError) {
     return (
-      <div className="text-red-500 flex mt-5 text-lg justify-center">{error?.message}</div>
+      <div className="text-red-500 flex mt-5 text-lg justify-center">
+        {error?.message}
+      </div>
     );
   }
   const cleanHtml = DOMPurify.sanitize(postData?.content || "", {
@@ -64,6 +67,17 @@ const PostPage = () => {
   return (
     <div className="container mx-auto">
       <div className="text-3xl font-bold my-4">{postData?.title}</div>
+      <div className="w-full flex justify-end items-center">
+        <p>Yazar : </p>
+        <div className="p-2">
+          <Badge>{postData?.author?.fullName}</Badge>
+        </div>
+        <img
+          src={postData?.author?.image}
+          alt="avatar"
+          className="w-10 h-10 object-cover rounded-full shadow-md"
+        />
+      </div>
       <div dangerouslySetInnerHTML={{ __html: cleanHtml }}></div>
     </div>
   );

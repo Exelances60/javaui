@@ -18,7 +18,7 @@ const HomeSection = ({ title, items, reverse, style }: HomeSectionProps) => {
     <BlurFade delay={0.25} inView>
       <div className={cn("w-full p-4 h-[200px]", style)}>
         <h1 className="text-lg mb-2 font-semibold"> {title} </h1>
-        <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden rounded-lg border bg-background md:shadow-xl">
+        <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden rounded-lg border bg-background">
           {items && items.length > 0 ? (
             <Marquee
               pauseOnHover
