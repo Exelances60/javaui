@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { LoadingSpinner } from "@/components/loading";
 import { useToast } from "@/components/ui/use-toast";
 import useCookies from "@/hooks/useCookies";
@@ -10,10 +11,12 @@ import {
   useEffect,
   useState,
 } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, Navigate } from "react-router-dom";
+import { ReactNode } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface IAuthContext {
-  user: IJWTPayload | null;
+  user: { role: string } | null;
   isLoggedIn: boolean;
   loading: boolean;
   login: (token: string) => void;
@@ -24,12 +27,12 @@ const AuthContext = createContext<IAuthContext>({
   user: null,
   isLoggedIn: false,
   loading: true, // Yüklenme durumu
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   login: (token: string) => {},
   logout: () => {},
 });
 
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const queryClient = useQueryClient();
   const [userContextData, setUserContextData] = useState<IJWTPayload | null>(
     null
   );
@@ -87,6 +90,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const logout = () => {
     removeCookie("token");
     setIsLoggedIn(false);
+    queryClient.clear();
     navigate("/");
   };
 
@@ -115,3 +119,24 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => useContext(AuthContext);
+
+export const RequireAuth = ({
+  children,
+  allowedRoles,
+}: {
+  children: JSX.Element;
+  allowedRoles: string[];
+}) => {
+  const { user, isLoggedIn } = useAuth();
+  const location = useLocation();
+
+  if (!isLoggedIn) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  if (user && !allowedRoles.includes(user.role)) {
+    return <Navigate to="/unauthorized" state={{ from: location }} replace />;
+  }
+
+  return children;
+};

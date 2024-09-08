@@ -19,8 +19,20 @@ import { useState } from "react";
 import { useCreatePost } from "@/hooks/usePostQueries";
 import PostConfirm from "./post-confirm";
 import { useToast } from "@/components/ui/use-toast";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogClose,
+} from "@/components/ui/dialog";
 
 const CreatePost = () => {
+  const [imageUrlOpen, setImageUrlOpen] = useState(false);
+  const [videoUrlOpen, setVideoUrlOpen] = useState(false);
+  const [url, setUrl] = useState("");
   const { toast } = useToast();
   const [title, setTitle] = useState("");
   const editor = useEditor({
@@ -49,20 +61,20 @@ const CreatePost = () => {
     editable: true,
   });
   const { mutate } = useCreatePost();
+
   if (!editor) {
     return null;
   }
 
   const addImage = () => {
-    const url = window.prompt("URL");
     if (url) {
       editor.chain().focus().insertContent(`<img src="${url}" />`).run();
     }
+    setImageUrlOpen(false);
+    setUrl("");
   };
 
   const addYoutubeVideo = () => {
-    const url = prompt("Enter YouTube URL");
-
     if (url) {
       editor.commands.setYoutubeVideo({
         src: url,
@@ -70,6 +82,8 @@ const CreatePost = () => {
         height: 480,
       });
     }
+
+    setImageUrlOpen(false);
   };
 
   const publishPost = async (image: string, categoryString: string) => {
@@ -105,10 +119,89 @@ const CreatePost = () => {
         <EditorContent editor={editor} />
       </PostTools>
       <PostDock
-        addImage={addImage}
+        setImageUrlOpen={setImageUrlOpen}
         editor={editor}
-        addYoutubeVideo={addYoutubeVideo}
+        setVideoUrlOpen={setVideoUrlOpen}
       />
+      <Dialog
+        open={imageUrlOpen}
+        onOpenChange={(open) => {
+          setUrl("");
+          return setImageUrlOpen(open);
+        }}
+      >
+        <DialogContent>
+          <DialogHeader className="text-left">
+            <DialogTitle className="mb-2">Resim</DialogTitle>
+            <Input
+              placeholder="Resim url giriniz"
+              onChange={(e) => setUrl(e.target.value)}
+            />
+          </DialogHeader>
+          {url && (
+            <div className="flex justify-center">
+              <img src={url} alt="resim" className="w-1/2" />
+            </div>
+          )}
+          <DialogFooter className="pt-2">
+            <Button
+              variant="default"
+              className="px-8"
+              size="sm"
+              onClick={() => addImage()}
+            >
+              Ekle
+            </Button>
+            <DialogClose asChild>
+              <Button variant="outline" className="px-8" size="sm">
+                İptal
+              </Button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      <Dialog
+        open={videoUrlOpen}
+        onOpenChange={(open) => {
+          setUrl("");
+          return setVideoUrlOpen(open);
+        }}
+      >
+        <DialogContent>
+          <DialogHeader className="text-left">
+            <DialogTitle className="mb-2">Video</DialogTitle>
+            <Input
+              placeholder="Youtube video url giriniz"
+              onChange={(e) => setUrl(e.target.value)}
+            />
+          </DialogHeader>
+          {url && (
+            <iframe
+              width="100%"
+              height="300"
+              src={`https://www.youtube.com/embed/${url.split("v=")[1]}`}
+              title="YouTube video player"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
+          )}
+          <DialogFooter className="pt-2">
+            <Button
+              variant="default"
+              className="px-8"
+              size="sm"
+              onClick={() => addYoutubeVideo()}
+            >
+              Ekle
+            </Button>
+            <DialogClose asChild>
+              <Button variant="outline" className="px-8" size="sm">
+                İptal
+              </Button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

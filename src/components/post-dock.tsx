@@ -4,13 +4,17 @@ import BlurFade from "./magicui/blur-fade";
 import type { Editor } from "@tiptap/react";
 
 interface PostDockProps {
-  addImage: () => void;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   editor: Editor | null;
-  addYoutubeVideo: () => void;
+  setImageUrlOpen: (value: boolean) => void;
+  setVideoUrlOpen: (value: boolean) => void;
 }
 
-export function PostDock({ addImage, editor, addYoutubeVideo }: PostDockProps) {
+export function PostDock({
+  editor,
+  setVideoUrlOpen,
+  setImageUrlOpen,
+}: PostDockProps) {
   return (
     <div className="fixed top-1/2 left-0 transform -translate-y-1/2 ml-5">
       <BlurFade delay={0.25} inView>
@@ -22,10 +26,10 @@ export function PostDock({ addImage, editor, addYoutubeVideo }: PostDockProps) {
           <DockIcon onClick={() => editor?.chain().focus().run()}>
             <Pencil className="w-6 h-6" />
           </DockIcon>
-          <DockIcon onClick={addImage}>
+          <DockIcon onClick={() => setImageUrlOpen(true)}>
             <Image className="w-6 h-6" />
           </DockIcon>
-          <DockIcon onClick={addYoutubeVideo}>
+          <DockIcon onClick={() => setVideoUrlOpen(true)}>
             <VideoIcon className="w-6 h-6" />
           </DockIcon>
           <DockIcon>

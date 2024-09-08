@@ -15,6 +15,7 @@ import { CircleUser } from "lucide-react";
 import { Button } from "./ui/button";
 
 const AvatarDropdown = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { userInfo, isError } = useGetUserInfo();
   const { toTitleCase } = useTextHooks();
   const { logout } = useAuth();
