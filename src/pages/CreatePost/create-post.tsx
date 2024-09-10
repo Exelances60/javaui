@@ -28,8 +28,14 @@ import {
   DialogTitle,
   DialogClose,
 } from "@/components/ui/dialog";
+import EmojiPicker, { Theme } from "emoji-picker-react";
+import { AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
+import { useTheme } from "@/components/theme-provider";
 
 const CreatePost = () => {
+  const { theme } = useTheme();
+  const [openEmoji, setOpenEmoji] = useState(false);
   const [imageUrlOpen, setImageUrlOpen] = useState(false);
   const [videoUrlOpen, setVideoUrlOpen] = useState(false);
   const [url, setUrl] = useState("");
@@ -121,8 +127,28 @@ const CreatePost = () => {
       <PostDock
         setImageUrlOpen={setImageUrlOpen}
         editor={editor}
+        setOpenEmoji={setOpenEmoji}
+        openEmoji={openEmoji}
         setVideoUrlOpen={setVideoUrlOpen}
       />
+      <AnimatePresence>
+        {openEmoji && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="absolute bottom-8 left-24"
+          >
+            <EmojiPicker
+              theme={theme as Theme}
+              height={400}
+              onEmojiClick={(emoji) => {
+                editor.chain().focus().insertContent(emoji.emoji).run();
+              }}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
       <Dialog
         open={imageUrlOpen}
         onOpenChange={(open) => {
