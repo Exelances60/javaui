@@ -10,6 +10,7 @@ import NotFoundPage from "./pages/404";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import CreatePost from "./pages/CreatePost/create-post";
+import BlogUserProfile from "./components/blog-user-profile";
 
 const LoginLazy = React.lazy(() => import("./pages/Login/login"));
 const RegisterLazy = React.lazy(() => import("./pages/Register/register"));
@@ -47,6 +48,7 @@ function App() {
                   <Route path="/profile" element={<ProfileLazy />} />
                   <Route path="/create-post" element={<CreatePost />} />
                   <Route path="/post/:id" element={<PostPageLazy />} />
+                  <Route path="/user/:id" element={<BlogUserProfile />} />
                 </Route>
                 <Route path="*" element={<NotFoundPage />} />
               </Routes>
