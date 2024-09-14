@@ -11,12 +11,12 @@ import {
   useEffect,
   useState,
 } from "react";
-import { useLocation, useNavigate, Navigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { ReactNode } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 
 interface IAuthContext {
-  user: { role: string } | null;
+  user: IJWTPayload | null;
   isLoggedIn: boolean;
   loading: boolean;
   login: (token: string) => void;
@@ -119,24 +119,3 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => useContext(AuthContext);
-
-export const RequireAuth = ({
-  children,
-  allowedRoles,
-}: {
-  children: JSX.Element;
-  allowedRoles: string[];
-}) => {
-  const { user, isLoggedIn } = useAuth();
-  const location = useLocation();
-
-  if (!isLoggedIn) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
-  }
-
-  if (user && !allowedRoles.includes(user.role)) {
-    return <Navigate to="/unauthorized" state={{ from: location }} replace />;
-  }
-
-  return children;
-};

@@ -20,6 +20,7 @@ export type ISocialMedaiPlartform =
 
 export interface UserInfo {
   image?: string;
+  backgroundImage?: string;
   id: number;
   fullName: string;
   email: string;

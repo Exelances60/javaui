@@ -2,8 +2,9 @@ import useTextHooks from "@/hooks/useTextHooks";
 import { useGetUserInfo } from "@/hooks/useUserInfo";
 import ErrorAlert from "@/components/error-alert";
 import { Skeleton } from "@/components/ui/skeleton";
+import UploadBackgroundImage from "./upload-background-image";
 
-const SettigsProfileCard = () => {
+const SettingsProfileCard = () => {
   const { error, isError, isLoading, userInfo } = useGetUserInfo();
   const { toTitleCase } = useTextHooks();
 
@@ -23,7 +24,17 @@ const SettigsProfileCard = () => {
   }
 
   return (
-    <div className="flex gap-2 items-center">
+    <div
+      className="relative flex gap-2 items-center py-5 px-5 rounded-lg overflow-hidden border-2 border-dashed"
+      style={{
+        backgroundImage: `url(${userInfo?.backgroundImage})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        border: userInfo?.backgroundImage ? "none" : "2px dashed",
+      }}
+    >
+      <UploadBackgroundImage />
       <img
         src={
           userInfo?.image
@@ -33,14 +44,14 @@ const SettigsProfileCard = () => {
         alt="profile"
         className="rounded-lg w-20 h-16 object-cover drop-shadow-md"
       />
-      <div className="flex flex-col justify-center">
+      <div className="flex flex-col justify-center backdrop-blur-lg text-[#f5f5f5] rounded-lg p-2 bg-black bg-opacity-40">
         <span className="text-lg font-bold">
           {toTitleCase(userInfo?.fullName || "")}
         </span>
-        <span className="text-md text-gray-500">{userInfo?.email}</span>
+        <span className="text-md">{userInfo?.email}</span>
       </div>
     </div>
   );
 };
 
-export default SettigsProfileCard;
+export default SettingsProfileCard;

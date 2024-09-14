@@ -19,8 +19,11 @@ import {
   Linkedin,
   X,
 } from "lucide-react";
+import { useParams } from "react-router-dom";
+import { Separator } from "./ui/separator";
 
 export default function BlogUserProfile() {
+  const { id } = useParams();
   const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("posts");
   const [user, setUser] = useState({
@@ -53,6 +56,8 @@ export default function BlogUserProfile() {
       },
     ],
   });
+
+  console.log(id);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-secondary p-4 sm:p-8">

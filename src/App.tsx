@@ -10,13 +10,15 @@ import NotFoundPage from "./pages/404";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import CreatePost from "./pages/CreatePost/create-post";
-import BlogUserProfile from "./components/blog-user-profile";
 
 const LoginLazy = React.lazy(() => import("./pages/Login/login"));
 const RegisterLazy = React.lazy(() => import("./pages/Register/register"));
 const HomeLazy = React.lazy(() => import("./pages/Home/home"));
 const ProfileLazy = React.lazy(() => import("./pages/Profile/profile"));
 const PostPageLazy = React.lazy(() => import("./pages/Post/post-page"));
+const BlogUserProfile = React.lazy(
+  () => import("./components/blog-user-profile")
+);
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const queryClient = new QueryClient({
