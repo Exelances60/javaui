@@ -200,6 +200,9 @@ export const useFollowUser = () => {
   return useMutation<IBaseResponse<UserInfo>, Error, number>({
     mutationFn: followUser,
     onSuccess: (data) => {
+      /*       queryClient.invalidateQueries({
+        queryKey: ["user", data.data.id],
+      }); */
       queryClient.setQueryData(["user", data.data.id], (oldData: UserInfo) => {
         return {
           ...oldData,

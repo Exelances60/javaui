@@ -101,7 +101,9 @@ export default function BlogUserProfile() {
             <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-muted-foreground">
               <div className="flex items-center space-x-2">
                 <MapPin className="w-4 h-4" />
-                <span className="capitalize">{userInfo?.address}</span>
+                <span className="capitalize">
+                  {userInfo?.address || "Mevcut değil"}
+                </span>
               </div>
               <div className="flex items-center space-x-2">
                 <Calendar className="w-4 h-4" />
@@ -116,35 +118,35 @@ export default function BlogUserProfile() {
               </div>
             </div>
             <Separator />
-            <BlogUserProfileTabs user={user} />
+            <BlogUserProfileTabs user={user} userInfo={userInfo} />
             <Separator />
             <div>
-              <h3 className="text-xl font-semibold mb-4">Connect</h3>
+              <h3 className="text-xl font-semibold mb-4">Sosyal Medya</h3>
               <div className="flex justify-center space-x-4">
-                <a
-                  href="#"
-                  className="text-primary hover:text-primary/80 transition-colors"
-                >
-                  <Facebook className="w-6 h-6" />
-                </a>
-                <a
-                  href="#"
-                  className="text-primary hover:text-primary/80 transition-colors"
-                >
-                  <Twitter className="w-6 h-6" />
-                </a>
-                <a
-                  href="#"
-                  className="text-primary hover:text-primary/80 transition-colors"
-                >
-                  <Instagram className="w-6 h-6" />
-                </a>
-                <a
-                  href="#"
-                  className="text-primary hover:text-primary/80 transition-colors"
-                >
-                  <Linkedin className="w-6 h-6" />
-                </a>
+                {userInfo?.socialMedia.map((social, index) => {
+                  return (
+                    <a
+                      key={index}
+                      href={social.accountLink}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-primary"
+                    >
+                      {social.platform === "Facebook" && (
+                        <Facebook className="w-6 h-6" />
+                      )}
+                      {social.platform === "Twitter" && (
+                        <Twitter className="w-6 h-6" />
+                      )}
+                      {social.platform === "Instagram" && (
+                        <Instagram className="w-6 h-6" />
+                      )}
+                      {social.platform === "Linkedin" && (
+                        <Linkedin className="w-6 h-6" />
+                      )}
+                    </a>
+                  );
+                })}
               </div>
             </div>
           </div>

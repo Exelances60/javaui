@@ -3,7 +3,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { X } from "lucide-react";
 import { useFollowUser, UserInfo } from "@/hooks/useUserInfo";
 import { useAuth } from "@/context/auth-contex";
 import { motion, AnimatePresence } from "framer-motion";
@@ -27,7 +26,10 @@ const BlogUserProfileHeader = ({ userInfo }: BlogUserProfileHeaderProps) => {
       <div className="h-48 overflow-hidden relative">
         <div className="absolute inset-0 bg-[var(--gradient-bg)] opacity-80"></div>
         <img
-          src={userInfo?.backgroundImage}
+          src={
+            userInfo?.backgroundImage ||
+            "https://st5.depositphotos.com/1558912/64911/i/450/depositphotos_649119262-stock-photo-fitness-background-pink-dumbbells-towel.jpg"
+          }
           alt="Cover"
           className="w-full h-full object-cover"
         />
@@ -51,14 +53,14 @@ const BlogUserProfileHeader = ({ userInfo }: BlogUserProfileHeaderProps) => {
                   alt={userInfo?.fullName}
                   className="w-full h-auto rounded-lg shadow-lg"
                 />
-                <Button
+                {/*  <Button
                   variant="ghost"
                   size="icon"
                   className="absolute top-2 right-2"
                   onClick={() => setIsAvatarModalOpen(false)}
                 >
                   <X className="h-4 w-4" />
-                </Button>
+                </Button> */}
               </div>
               <h2 className="text-2xl font-semibold text-center mt-4">
                 {userInfo?.fullName}
@@ -82,7 +84,7 @@ const BlogUserProfileHeader = ({ userInfo }: BlogUserProfileHeaderProps) => {
             >
               <Button
                 variant={userInfo?.isFollowed ? "outline" : "default"}
-                className={`mt-6 px-6 py-2 text-lg font-semibold rounded-full transition-all duration-300 ${
+                className={`mt-6 px-6 py-2 text-lg font-semibold   transition-all duration-300 ${
                   userInfo?.isFollowed
                     ? "bg-background text-foreground hover:bg-background/90"
                     : "bg-primary text-primary-foreground hover:bg-primary/90"

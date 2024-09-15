@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Calendar, MapPin } from "lucide-react";
+import { UserInfo } from "@/hooks/useUserInfo";
 
 interface BlogUserProfileTabsProps {
+  userInfo?: UserInfo;
   user: {
     name: string;
     email: string;
@@ -21,7 +23,7 @@ interface BlogUserProfileTabsProps {
   };
 }
 
-const BlogUserProfileTabs = ({ user }: BlogUserProfileTabsProps) => {
+const BlogUserProfileTabs = ({ user, userInfo }: BlogUserProfileTabsProps) => {
   const [activeTab, setActiveTab] = useState("posts");
 
   return (
@@ -86,14 +88,14 @@ const BlogUserProfileTabs = ({ user }: BlogUserProfileTabsProps) => {
       </TabsContent>
       <TabsContent value="about">
         <div className="space-y-4">
-          <p>{user.bio}</p>
+          <p>{userInfo?.summary}</p>
           <div className="flex items-center space-x-2">
             <MapPin className="w-4 h-4" />
-            <span>{user.location}</span>
+            <span>{userInfo?.address || "Mevcut değil"}</span>
           </div>
           <div className="flex items-center space-x-2">
             <Calendar className="w-4 h-4" />
-            <span>Joined {user.joinDate}</span>
+            <span>Joined {userInfo?.createdAt}</span>
           </div>
         </div>
       </TabsContent>
