@@ -1,7 +1,8 @@
 import { useToast } from "@/components/ui/use-toast";
 import axiosInstance from "@/lib/axios";
 import axiosGraph from "@/lib/axiosGraph";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { IBaseResponse } from "@/types/base-response";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { gql } from "graphql-request";
 
 export interface ICreatePost {
@@ -24,9 +25,12 @@ export interface Post {
   title: string;
   content: string;
   image: string;
+  likes?: number;
+  liked: boolean;
   author?: {
     id: number;
     fullName: string;
+    job?: string;
     image: string;
   };
 }
@@ -52,6 +56,7 @@ const createPost = async (data: ICreatePost) => {
 
 export const useCreatePost = () => {
   const { toast } = useToast();
+  const queryClient = useQueryClient();
   return useMutation<string, GraphqlError[], ICreatePost>({
     mutationFn: (data) => createPost(data),
     onError: (error) => {
@@ -66,6 +71,9 @@ export const useCreatePost = () => {
         title: "Başarılı",
         description: "Post başarıyla oluşturuldu.",
         variant: "success",
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["home-posts"],
       });
     },
   });
@@ -154,4 +162,34 @@ export const usePostById = (id: number) => {
     refetchOnWindowFocus: false,
   });
   return { postData: data, error, isLoading, refetch, isError };
+};
+
+const likePost = async (postId: number) => {
+  try {
+    const response = await axiosInstance.post(`/post/like/${postId}`);
+    return response.data;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    throw error.response.data;
+  }
+};
+
+export const useLikePost = (id: number) => {
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+  return useMutation<IBaseResponse<string>, Error, number>({
+    mutationFn: likePost,
+    onError: (error) => {
+      toast({
+        title: "Hata",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(["post", id], () => {
+        return data.data;
+      });
+    },
+  });
 };

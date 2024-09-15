@@ -4,7 +4,10 @@ import { Button } from "@/components/ui/button";
 import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { X } from "lucide-react";
-import { UserInfo } from "@/hooks/useUserInfo";
+import { useFollowUser, UserInfo } from "@/hooks/useUserInfo";
+import { useAuth } from "@/context/auth-contex";
+import { motion, AnimatePresence } from "framer-motion";
+import { Check, UserPlus } from "lucide-react";
 
 interface BlogUserProfileHeaderProps {
   userInfo?: UserInfo;
@@ -12,6 +15,12 @@ interface BlogUserProfileHeaderProps {
 
 const BlogUserProfileHeader = ({ userInfo }: BlogUserProfileHeaderProps) => {
   const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
+  const { user } = useAuth();
+  const { mutate: follow } = useFollowUser();
+
+  const handleFollow = () => {
+    follow(userInfo?.id || 0);
+  };
 
   return (
     <>
@@ -61,6 +70,46 @@ const BlogUserProfileHeader = ({ userInfo }: BlogUserProfileHeaderProps) => {
           {userInfo?.fullName}
         </CardTitle>
         <CardDescription className="text-xl">{userInfo?.email}</CardDescription>
+        {userInfo?.id !== user?.id ? (
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={userInfo?.isFollowed ? "following" : "not-following"}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.2 }}
+              className="w-full flex items-center justify-center"
+            >
+              <Button
+                variant={userInfo?.isFollowed ? "outline" : "default"}
+                className={`mt-6 px-6 py-2 text-lg font-semibold rounded-full transition-all duration-300 ${
+                  userInfo?.isFollowed
+                    ? "bg-background text-foreground hover:bg-background/90"
+                    : "bg-primary text-primary-foreground hover:bg-primary/90"
+                }`}
+                onClick={() => handleFollow()}
+              >
+                <AnimatePresence mode="wait">
+                  <motion.span
+                    key={userInfo?.isFollowed ? "check" : "plus"}
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.5 }}
+                    transition={{ duration: 0.2 }}
+                    className="mr-2"
+                  >
+                    {userInfo?.isFollowed ? (
+                      <Check className="h-5 w-5" />
+                    ) : (
+                      <UserPlus className="h-5 w-5" />
+                    )}
+                  </motion.span>
+                </AnimatePresence>
+                {userInfo?.isFollowed ? "Following" : "Follow"}
+              </Button>
+            </motion.div>
+          </AnimatePresence>
+        ) : null}
       </CardHeader>
     </>
   );

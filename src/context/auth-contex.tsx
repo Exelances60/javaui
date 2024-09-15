@@ -90,9 +90,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const logout = () => {
     console.log("logout");
     removeCookie("token");
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     setIsLoggedIn(false);
     queryClient.clear();
-    navigate("/");
+    return navigate("/");
   };
 
   if (loading) {

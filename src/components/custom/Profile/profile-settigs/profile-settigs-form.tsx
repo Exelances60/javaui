@@ -10,6 +10,8 @@ import {
   PersonStandingIcon,
   Phone,
   Save,
+  ClipboardPenIcon,
+  MapPin,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -36,6 +38,8 @@ const ProfileSettigsForm = () => {
           .string()
           .length(11, { message: "Telefon numarası 11 haneli olmalıdır" })
       ),
+    summary: z.string().optional(),
+    address: z.string().optional(),
   });
 
   const profileForm = useForm<z.infer<typeof profileFormSchema>>({
@@ -47,6 +51,8 @@ const ProfileSettigsForm = () => {
       fullName: userInfo?.fullName || "",
       job: userInfo?.job || "",
       phone: userInfo?.phone || "",
+      summary: userInfo?.summary || "",
+      address: userInfo?.address || "",
     },
   });
 
@@ -113,6 +119,22 @@ const ProfileSettigsForm = () => {
               name="phone"
               label="Telefon"
               icon={Phone}
+              disabled={!isEdit}
+            />
+            <FormInput
+              control={profileForm.control}
+              name="summary"
+              label="Özet"
+              type="textarea"
+              icon={ClipboardPenIcon}
+              disabled={!isEdit}
+            />
+            <FormInput
+              control={profileForm.control}
+              name="address"
+              label="Adres"
+              type="textarea"
+              icon={MapPin}
               disabled={!isEdit}
             />
           </div>

@@ -65,7 +65,6 @@ const PostPage = () => {
     FORBID_TAGS: ["script", "embed", "object", "link"],
     FORBID_ATTR: ["onerror", "onclick", "onload", "onmouseover"],
   });
-
   return (
     <div className="mx-auto border-2 my-2 container p-4 rounded-lg ">
       <div className="text-3xl font-bold my-4">{postData?.title}</div>

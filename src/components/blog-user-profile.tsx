@@ -7,6 +7,7 @@ import {
   Twitter,
   Instagram,
   Linkedin,
+  Briefcase,
 } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { Separator } from "./ui/separator";
@@ -74,25 +75,33 @@ export default function BlogUserProfile() {
         <BlogUserProfileHeader userInfo={userInfo} />
         <CardContent>
           <div className="space-y-6">
-            <p className="text-lg text-muted-foreground italic">{user.bio}</p>
+            <p className="text-lg text-muted-foreground italic">
+              {userInfo?.summary}
+            </p>
             <div className="flex flex-wrap justify-center gap-4 text-center">
               <div className="bg-primary/10 rounded-lg p-3 transition-transform hover:scale-105">
-                <div className="text-2xl font-bold">{user.postsCount}</div>
+                <div className="text-2xl font-bold">{userInfo?.postCount}</div>
                 <div className="text-sm text-muted-foreground">Posts</div>
               </div>
               <div className="bg-primary/10 rounded-lg p-3 transition-transform hover:scale-105">
-                <div className="text-2xl font-bold">{user.followersCount}</div>
-                <div className="text-sm text-muted-foreground">Followers</div>
+                <div className="text-2xl font-bold">
+                  {userInfo?.followerCount}
+                </div>
+                <div className="text-sm text-muted-foreground">Takipçi</div>
               </div>
               <div className="bg-primary/10 rounded-lg p-3 transition-transform hover:scale-105">
-                <div className="text-2xl font-bold">{user.followingCount}</div>
-                <div className="text-sm text-muted-foreground">Following</div>
+                <div className="text-2xl font-bold">
+                  {userInfo?.followingCount}
+                </div>
+                <div className="text-sm text-muted-foreground">
+                  Takip Edilen
+                </div>
               </div>
             </div>
             <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-muted-foreground">
               <div className="flex items-center space-x-2">
                 <MapPin className="w-4 h-4" />
-                <span>{user.location}</span>
+                <span className="capitalize">{userInfo?.address}</span>
               </div>
               <div className="flex items-center space-x-2">
                 <Calendar className="w-4 h-4" />
@@ -100,6 +109,10 @@ export default function BlogUserProfile() {
                   Joined{" "}
                   {new Date(userInfo?.createdAt || "").toLocaleDateString()}
                 </span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Briefcase className="w-4 h-4" />
+                <span className="capitalize">{userInfo?.job}</span>
               </div>
             </div>
             <Separator />

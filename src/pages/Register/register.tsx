@@ -22,6 +22,7 @@ import DotPattern from "@/components/magicui/dot-pattern";
 import BlurFade from "@/components/magicui/blur-fade";
 import { cn } from "@/lib/utils";
 import SparklesText from "@/components/magicui/sparkles-text";
+import { useAuth } from "@/context/auth-contex";
 
 const formSchema = z.object({
   fullName: z
@@ -32,6 +33,7 @@ const formSchema = z.object({
 });
 
 const Register = () => {
+  const { login } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -56,6 +58,8 @@ const Register = () => {
         description: response.data.message,
         variant: "success",
       });
+      const responseLogin = await axiosInstance.post("/auth/login", values);
+      login(responseLogin.data.data);
       form.reset();
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {

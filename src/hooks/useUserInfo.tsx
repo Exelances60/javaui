@@ -4,7 +4,7 @@ import { useAuth } from "@/context/auth-contex";
 import axiosInstance from "@/lib/axios";
 import { IBaseResponse } from "@/types/base-response";
 import { formatErrors } from "@/utils/format-erros";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export interface ISocialMedia {
   id: number;
@@ -27,6 +27,12 @@ export interface UserInfo {
   phone: string;
   job: string;
   socialMedia: ISocialMedia[];
+  summary?: string;
+  address?: string;
+  isFollowed: boolean;
+  followerCount: number;
+  followingCount: number;
+  postCount: number;
   createdAt: Date;
 }
 
@@ -113,6 +119,8 @@ type UpdateUserInfoData = {
   image?: any;
   job?: string;
   phone?: string;
+  summary?: string;
+  address?: string;
 };
 
 const updateUserInfo = async (data: UpdateUserInfoData, userId: number) => {
@@ -164,6 +172,42 @@ export const useUpdateUserInfo = () => {
           return data?.data;
         });
       }
+    },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onError: (error: any) => {
+      toast({
+        title: "Hata",
+        description: formatErrors(error),
+        variant: "destructive",
+      });
+    },
+  });
+};
+
+const followUser = async (userId?: number) => {
+  try {
+    const response = await axiosInstance.post(`/user/follow/${userId}`);
+    return response.data;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    throw error.response.data;
+  }
+};
+
+export const useFollowUser = () => {
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+  return useMutation<IBaseResponse<UserInfo>, Error, number>({
+    mutationFn: followUser,
+    onSuccess: (data) => {
+      queryClient.setQueryData(["user", data.data.id], (oldData: UserInfo) => {
+        return {
+          ...oldData,
+          isFollowed: data.data.isFollowed,
+          followerCount: data.data.followerCount,
+          followingCount: data.data.followingCount,
+        };
+      });
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onError: (error: any) => {
