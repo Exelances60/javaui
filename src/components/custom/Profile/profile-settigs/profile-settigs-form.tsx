@@ -15,9 +15,11 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import FormInput from "../../form-input";
 import { ImageUploader } from "@/components/image-uploader";
+import { useAuth } from "@/context/auth-contex";
 
 const ProfileSettigsForm = () => {
-  const { userInfo } = useGetUserInfo();
+  const { user } = useAuth();
+  const { userInfo } = useGetUserInfo(user?.id ? +user.id : undefined);
   const { mutate: updateUser } = useUpdateUserInfo();
   const [isEdit, setIsEdit] = useState(false);
 

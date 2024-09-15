@@ -126,8 +126,8 @@
     iframe {
       border: 0.5rem solid var(--black-contrast);
       display: block;
-      min-height: 200px;
-      min-width: 200px;
+      height: 400px;
+      min-width: 100%;
       outline: 0px solid transparent;
     }
 

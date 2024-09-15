@@ -25,6 +25,7 @@ export interface Post {
   content: string;
   image: string;
   author?: {
+    id: number;
     fullName: string;
     image: string;
   };

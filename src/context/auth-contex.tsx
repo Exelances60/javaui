@@ -88,6 +88,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const logout = () => {
+    console.log("logout");
     removeCookie("token");
     setIsLoggedIn(false);
     queryClient.clear();

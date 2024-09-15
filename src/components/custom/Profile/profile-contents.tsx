@@ -5,9 +5,13 @@ import SocialSettigsTab from "@/components/custom/Profile/social-settigs-tab";
 import { useGetUserInfo } from "@/hooks/useUserInfo";
 import ErrorAlert from "@/components/error-alert";
 import { SkeletonCard } from "@/components/skeleton-card";
+import { useAuth } from "@/context/auth-contex";
 
 const ProfileContets = ({ tab }: { tab: string }) => {
-  const { error, isError, isLoading, userInfo } = useGetUserInfo();
+  const { user } = useAuth();
+  const { userInfo, isError, error, isLoading } = useGetUserInfo(
+    user?.id ? +user.id : undefined
+  );
 
   if (isError) {
     return <ErrorAlert error={error as Error} />;

@@ -27,6 +27,7 @@ export interface UserInfo {
   phone: string;
   job: string;
   socialMedia: ISocialMedia[];
+  createdAt: Date;
 }
 
 const fetchUserInfo = async (userId?: number) => {
@@ -45,12 +46,10 @@ const fetchUserInfo = async (userId?: number) => {
   }
 };
 
-export const useGetUserInfo = () => {
-  const { user } = useAuth();
-
+export const useGetUserInfo = (id?: number) => {
   const { data, error, isLoading, isError } = useQuery<UserInfo, Error>({
-    queryKey: ["user", user?.id],
-    queryFn: () => fetchUserInfo(user?.id ? +user.id : undefined),
+    queryKey: ["user", id],
+    queryFn: () => fetchUserInfo(id),
     staleTime: 1000 * 60 * 60, // 1 hour
     gcTime: 1000 * 60 * 60 * 24, //  1 day
   });

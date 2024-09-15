@@ -16,7 +16,8 @@ import { Button } from "./ui/button";
 
 const AvatarDropdown = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { userInfo, isError } = useGetUserInfo();
+  const { user } = useAuth();
+  const { userInfo } = useGetUserInfo(user?.id ? +user.id : undefined);
   const { toTitleCase } = useTextHooks();
   const { logout } = useAuth();
 

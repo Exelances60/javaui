@@ -3,9 +3,13 @@ import { useGetUserInfo } from "@/hooks/useUserInfo";
 import ErrorAlert from "@/components/error-alert";
 import { Skeleton } from "@/components/ui/skeleton";
 import UploadBackgroundImage from "./upload-background-image";
+import { useAuth } from "@/context/auth-contex";
 
 const SettingsProfileCard = () => {
-  const { error, isError, isLoading, userInfo } = useGetUserInfo();
+  const { user } = useAuth();
+  const { userInfo, isError, error, isLoading } = useGetUserInfo(
+    user?.id ? +user.id : undefined
+  );
   const { toTitleCase } = useTextHooks();
 
   if (isError) {

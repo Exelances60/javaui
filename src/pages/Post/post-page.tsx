@@ -2,8 +2,8 @@ import { LoadingSpinner } from "@/components/loading";
 import { usePostById } from "@/hooks/usePostQueries";
 import { useParams } from "react-router-dom";
 import DOMPurify from "dompurify";
-import { Badge } from "@/components/ui/badge";
 import "./post.css";
+import PostAuthor from "@/components/custom/Post/post-author";
 
 const PostPage = () => {
   const { id } = useParams();
@@ -11,7 +11,7 @@ const PostPage = () => {
     id ? parseInt(id) : 0
   );
   if (!id) {
-    return <div>Post not found</div>;
+    return <div>Post bulunamadı</div>;
   }
   if (isLoading) {
     return (
@@ -66,21 +66,10 @@ const PostPage = () => {
     FORBID_ATTR: ["onerror", "onclick", "onload", "onmouseover"],
   });
 
-  console.log(postData);
   return (
     <div className="mx-auto border-2 my-2 container p-4 rounded-lg ">
       <div className="text-3xl font-bold my-4">{postData?.title}</div>
-      <div className="w-full flex justify-end items-center">
-        <p>Yazar : </p>
-        <div className="p-2">
-          <Badge>{postData?.author?.fullName}</Badge>
-        </div>
-        <img
-          src={postData?.author?.image}
-          alt="avatar"
-          className="w-10 h-10 object-cover rounded-full shadow-md"
-        />
-      </div>
+      <PostAuthor postData={postData} />
       <div
         dangerouslySetInnerHTML={{ __html: cleanHtml }}
         className="content"

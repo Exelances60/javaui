@@ -32,9 +32,11 @@ import EmojiPicker, { Theme } from "emoji-picker-react";
 import { AnimatePresence } from "framer-motion";
 import { motion } from "framer-motion";
 import { useTheme } from "@/components/theme-provider";
+import { useNavigate } from "react-router-dom";
 
 const CreatePost = () => {
   const { theme } = useTheme();
+  const navigate = useNavigate();
   const [openEmoji, setOpenEmoji] = useState(false);
   const [imageUrlOpen, setImageUrlOpen] = useState(false);
   const [videoUrlOpen, setVideoUrlOpen] = useState(false);
@@ -89,7 +91,8 @@ const CreatePost = () => {
       });
     }
 
-    setImageUrlOpen(false);
+    setVideoUrlOpen(false);
+    setUrl("");
   };
 
   const publishPost = async (image: string, categoryString: string) => {
@@ -100,6 +103,7 @@ const CreatePost = () => {
       const content = editor.getHTML();
       const categoryId = parseInt(categoryString);
       mutate({ title, content, image, categoryId });
+      navigate("/");
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       toast({
