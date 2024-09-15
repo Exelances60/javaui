@@ -95,7 +95,7 @@ const BlogUserProfileTabs = ({ user, userInfo }: BlogUserProfileTabsProps) => {
           </div>
           <div className="flex items-center space-x-2">
             <Calendar className="w-4 h-4" />
-            <span>Joined {userInfo?.createdAt}</span>
+            <span>Joined {userInfo?.createdAt?.toString()}</span>
           </div>
         </div>
       </TabsContent>
