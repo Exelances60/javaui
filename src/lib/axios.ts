@@ -2,7 +2,7 @@ import axios from "axios";
 import Cookies from "universal-cookie";
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:8080/api",
+  baseURL: "https://fitnes-api-e6yv.onrender.com/api",
 });
 
 axiosInstance.interceptors.request.use(
