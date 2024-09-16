@@ -160,9 +160,9 @@ export const useUpdateUserInfo = () => {
       return updateUserInfo(data, +userId);
     },
     onSuccess: (data) => {
-      /*       queryClient.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: ["user", user?.id],
-      }); */
+      });
       toast({
         title: "Başarılı",
         description: data.message,
