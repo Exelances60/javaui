@@ -60,6 +60,7 @@ const ProfileSettigsForm = () => {
     try {
       updateUser(data);
       setIsEdit(false);
+      profileForm.setValue("image", "");
     } catch (error) {
       /*    console.log(error); */
     }

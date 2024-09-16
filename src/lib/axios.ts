@@ -2,7 +2,8 @@ import axios from "axios";
 import Cookies from "universal-cookie";
 
 const axiosInstance = axios.create({
-  baseURL: "https://fitnes-api-e6yv.onrender.com/api",
+  baseURL:
+    "http://fitnesapidev-env.eba-ihvqfs3j.eu-central-1.elasticbeanstalk.com/api",
 });
 
 axiosInstance.interceptors.request.use(

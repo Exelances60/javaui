@@ -149,6 +149,7 @@ const updateUserInfo = async (data: UpdateUserInfoData, userId: number) => {
 export const useUpdateUserInfo = () => {
   const { toast } = useToast();
   const { user } = useAuth();
+  const queryClient = useQueryClient();
 
   return useMutation<IBaseResponse<UserInfo>, Error, UpdateUserInfoData>({
     mutationFn: (data) => {
@@ -159,6 +160,9 @@ export const useUpdateUserInfo = () => {
       return updateUserInfo(data, +userId);
     },
     onSuccess: (data) => {
+      /*       queryClient.invalidateQueries({
+        queryKey: ["user", user?.id],
+      }); */
       toast({
         title: "Başarılı",
         description: data.message,
