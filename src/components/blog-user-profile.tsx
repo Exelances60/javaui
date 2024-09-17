@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   MapPin,
@@ -9,7 +8,7 @@ import {
   Linkedin,
   Briefcase,
 } from "lucide-react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Separator } from "./ui/separator";
 import { useGetUserInfo } from "@/hooks/useUserInfo";
 import { LoadingSpinner } from "./loading";
@@ -21,36 +20,6 @@ export default function BlogUserProfile() {
   const { userInfo, error, isError, isLoading } = useGetUserInfo(
     id ? +id : undefined
   );
-  const [user, setUser] = useState({
-    name: "Emily Chen",
-    email: "emily.chen@example.com",
-    bio: "Travel enthusiast and food blogger. Exploring the world one dish at a time. Sharing my culinary adventures and travel stories.",
-    location: "San Francisco, CA",
-    joinDate: "January 2020",
-    postsCount: 127,
-    followersCount: 1500,
-    followingCount: 300,
-    recentPosts: [
-      {
-        title: "10 Must-Try Dishes in Tokyo",
-        date: "2023-06-15",
-        likes: 89,
-        comments: 23,
-      },
-      {
-        title: "A Foodie's Guide to Paris",
-        date: "2023-05-22",
-        likes: 112,
-        comments: 34,
-      },
-      {
-        title: "Hidden Gems: Street Food in Bangkok",
-        date: "2023-04-30",
-        likes: 76,
-        comments: 18,
-      },
-    ],
-  });
 
   if (!id) {
     return <div className="text-center">Kullanıcı ID'si bulunamadı.</div>;
@@ -68,7 +37,6 @@ export default function BlogUserProfile() {
     );
   }
 
-  console.log(userInfo);
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-secondary p-4 sm:p-8">
       <Card className="max-w-4xl mx-auto overflow-hidden shadow-2xl">
@@ -118,16 +86,16 @@ export default function BlogUserProfile() {
               </div>
             </div>
             <Separator />
-            <BlogUserProfileTabs user={user} userInfo={userInfo} />
+            <BlogUserProfileTabs userInfo={userInfo} />
             <Separator />
             <div>
               <h3 className="text-xl font-semibold mb-4">Sosyal Medya</h3>
               <div className="flex justify-center space-x-4">
                 {userInfo?.socialMedia.map((social, index) => {
                   return (
-                    <a
+                    <Link
                       key={index}
-                      href={social.accountLink}
+                      to={social.accountLink}
                       target="_blank"
                       rel="noreferrer"
                       className="text-primary"
@@ -144,7 +112,7 @@ export default function BlogUserProfile() {
                       {social.platform === "Linkedin" && (
                         <Linkedin className="w-6 h-6" />
                       )}
-                    </a>
+                    </Link>
                   );
                 })}
               </div>

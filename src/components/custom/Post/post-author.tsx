@@ -41,7 +41,7 @@ const PostAuthor = ({ postData }: IPostAuthor) => {
         </div>
         <Popover>
           <PopoverTrigger asChild>
-            <Avatar className="w-10 h-10 cursor-pointer">
+            <Avatar className="w-10 h-10 cursor-pointer shadow-lg">
               <AvatarImage
                 src={postData?.author?.image}
                 alt={postData?.author?.fullName}
