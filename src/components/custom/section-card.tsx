@@ -26,6 +26,9 @@ const SectionCard = ({ data }: SectionCardProps) => {
         <img
           src={data.image}
           alt={data.title}
+          onError={(e) => {
+            e.currentTarget.src = dummyfood;
+          }}
           className="object-cover w-full h-full"
         />
         <div
