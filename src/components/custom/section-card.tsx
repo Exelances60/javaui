@@ -10,7 +10,7 @@ interface SectionCardProps {
 
 const SectionCard = ({ data }: SectionCardProps) => {
   const navigate = useNavigate();
-  const cleanHtml = DOMPurify.sanitize(data.content.slice(0, 200));
+  const cleanHtml = DOMPurify.sanitize(data.content.slice(0, 50));
   return (
     <figure
       onClick={() => navigate(`/post/${data.id}`)}
@@ -54,7 +54,7 @@ const SectionCard = ({ data }: SectionCardProps) => {
           </div>
         </div>
         <blockquote
-          className="text-sm"
+          className="text-sm pb-5"
           dangerouslySetInnerHTML={{ __html: cleanHtml }}
         ></blockquote>
       </div>
