@@ -20,7 +20,7 @@ const FoodPage = () => {
   }
 
   if (error) {
-    return <div>Error: {error.message}</div>;
+    return <div>Bir hata oluştu</div>;
   }
 
   return (
