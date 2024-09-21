@@ -2,7 +2,7 @@ import { LoadingSpinner } from "@/components/loading";
 import { usePostById } from "@/hooks/usePostQueries";
 import { useParams } from "react-router-dom";
 import DOMPurify from "dompurify";
-import "./post.css";
+import "./post.scss";
 import PostAuthor from "@/components/custom/Post/post-author";
 
 const PostPage = () => {

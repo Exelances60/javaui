@@ -1,4 +1,5 @@
 import { useToast } from "@/components/ui/use-toast";
+import { useAuth } from "@/context/auth-contex";
 import axiosInstance from "@/lib/axios";
 import axiosGraph from "@/lib/axiosGraph";
 import { IBaseResponse } from "@/types/base-response";
@@ -27,6 +28,7 @@ export interface Post {
   image: string;
   likes?: number;
   liked: boolean;
+  createdAt: string;
   author?: {
     id: number;
     fullName: string;
@@ -189,6 +191,83 @@ export const useLikePost = (id: number) => {
     onSuccess: (data) => {
       queryClient.setQueryData(["post", id], () => {
         return data.data;
+      });
+    },
+  });
+};
+
+export interface ICriteria {
+  filterKey: string;
+  operation: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  value: any;
+}
+
+const getAllPostsWithPagination = async (criteria: {
+  page: number;
+  size: number;
+  criteria: ICriteria[];
+}) => {
+  try {
+    const response = await axiosInstance.post("/post/all-posts", criteria);
+    return response.data.data;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    throw error.response.data;
+  }
+};
+
+export const useAllPostsWithPagination = (criteria: {
+  page: number;
+  size: number;
+  criteria: ICriteria[];
+}) => {
+  const { data, error, isLoading, refetch } = useQuery<Post[], Error>({
+    queryKey: ["all-posts", criteria.criteria.map((c) => c.value).join("")],
+    queryFn: () => getAllPostsWithPagination(criteria),
+    refetchOnWindowFocus: false,
+  });
+  return { postData: data, error, isLoading, refetch };
+};
+
+const deletePost = async (id: number) => {
+  try {
+    const response = await axiosInstance.delete(`/post/${id}`);
+    return response.data;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    throw error.response.data;
+  }
+};
+
+export const useDeletePost = () => {
+  const { toast } = useToast();
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
+  if (!user) {
+    throw new Error("Kullanıcı bilgileri bulunamiyor.");
+  }
+  return useMutation<IBaseResponse<string>, Error, number>({
+    mutationFn: deletePost,
+    onError: (error) => {
+      toast({
+        title: "Hata",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+    onSuccess: (data, postId) => {
+      queryClient.setQueryData(
+        ["all-posts", user.id.toString()],
+        (oldData: Post[] | undefined) => {
+          console.log(oldData);
+          return oldData?.filter((post) => post.id !== postId);
+        }
+      );
+      toast({
+        title: "Başarılı",
+        description: data.message,
+        variant: "success",
       });
     },
   });

@@ -53,14 +53,6 @@ const BlogUserProfileHeader = ({ userInfo }: BlogUserProfileHeaderProps) => {
                   alt={userInfo?.fullName}
                   className="w-full h-auto rounded-lg shadow-lg"
                 />
-                {/*  <Button
-                  variant="ghost"
-                  size="icon"
-                  className="absolute top-2 right-2"
-                  onClick={() => setIsAvatarModalOpen(false)}
-                >
-                  <X className="h-4 w-4" />
-                </Button> */}
               </div>
               <h2 className="text-2xl font-semibold text-center mt-4">
                 {userInfo?.fullName}
@@ -84,7 +76,7 @@ const BlogUserProfileHeader = ({ userInfo }: BlogUserProfileHeaderProps) => {
             >
               <Button
                 variant={userInfo?.isFollowed ? "outline" : "default"}
-                className={`mt-6 px-6 py-2 text-lg font-semibold   transition-all duration-300 ${
+                className={`mt-6 px-6 py-2 text-lg font-semibold rounded-full transition-all duration-300 ${
                   userInfo?.isFollowed
                     ? "bg-background text-foreground hover:bg-background/90"
                     : "bg-primary text-primary-foreground hover:bg-primary/90"

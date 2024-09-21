@@ -19,6 +19,7 @@ const PostPageLazy = React.lazy(() => import("./pages/Post/post-page"));
 const BlogUserProfile = React.lazy(
   () => import("./components/blog-user-profile")
 );
+const FoodPageLazy = React.lazy(() => import("./pages/FoodPage/food-page"));
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const queryClient = new QueryClient({
@@ -49,6 +50,10 @@ function App() {
                   <Route path="/home" element={<HomeLazy />} />
                   <Route path="/profile" element={<ProfileLazy />} />
                   <Route path="/create-post" element={<CreatePost />} />
+                  <Route
+                    path="/fit-yemek-tarifleri"
+                    element={<FoodPageLazy />}
+                  />
                   <Route path="/post/:id" element={<PostPageLazy />} />
                   <Route path="/user/:id" element={<BlogUserProfile />} />
                 </Route>
