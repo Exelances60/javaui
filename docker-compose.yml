@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   fitnesblog:
     image: fitnesblog
@@ -9,9 +7,12 @@ services:
     environment:
       NODE_ENV: production
     ports:
-      - "8080:80" # Dışarıdan 8080'e, container içinde 80'e yönlendiriyoruz.
+      - "8080:80"
     restart: unless-stopped
     labels:
       - traefik.enable=true
       - traefik.http.routers.fitnesblog.rule=Host(`n0o04kko44gcw4ocksog884w.2.59.117.162.sslip.io`)
       - traefik.http.services.fitnesblog.loadbalancer.server.port=8080
+      - traefik.http.middlewares.redirect-to-8080.redirectscheme.scheme=http
+      - traefik.http.middlewares.redirect-to-8080.redirectscheme.port=8080
+      - traefik.http.routers.fitnesblog.middlewares=redirect-to-8080
